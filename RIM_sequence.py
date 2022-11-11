@@ -28,6 +28,7 @@ class RIM(tf.keras.Model):
     """
     Subclass model to create recurrent inference machine
     If the problem is 2D, we assume the input is square
+
     """
     def __init__(self, rnn_units1, rnn_units2, conv_filters, kernel_size, input_size, dimensions, t_steps, learning_rate=0.01, decay=0.5, 
                 patience=10, learning_rate_function='step', epochs_drop=10
@@ -69,6 +70,7 @@ class RIM(tf.keras.Model):
 
         Args:
             batch_size: Number of spectra in batch
+        
         """
         h_1 = None
         h_2 = None
@@ -88,6 +90,7 @@ class RIM(tf.keras.Model):
 
         Args:
             batch_size: Number of spectra in batch
+        
         """
         y_init = None
         if self.dimensions == 1:
@@ -104,13 +107,16 @@ class RIM(tf.keras.Model):
         """
         Update the learrning rate at the end of each epoch based on the decay equation
 
-        $\alpha = \frac{\alpha_0}{1+\eta*\epsilon}$
+        .. math::
+        
+           \alpha = \frac{\alpha_0}{1+\eta*\epsilon}
 
         Args:
             epoch: Current epoch of training (epsilon)
 
         Return:
             Updated learning rate
+
         """
         decay_term = (1 + self.decay * epoch)
         self.learning_rate = self.learning_rate/decay_term
@@ -128,6 +134,7 @@ class RIM(tf.keras.Model):
 
         Return:
             Updated learning rate
+        
         """
         decay_term = (1 + self.decay * tf.math.floor((epoch)/self.epochs_drop))
         self.learning_rate = self.learning_rate/decay_term
@@ -153,6 +160,9 @@ class RIM(tf.keras.Model):
     def assign_learning_rate_function(self,learning_rate_function):
         """
         Assign learning rate function based off user's input
+
+        Args:
+            learning_rate_function: Selected learning rate function
         """
         lrf = None  # Set learning rate function
         if learning_rate_function == 'step':
@@ -176,7 +186,8 @@ class RIM(tf.keras.Model):
             y_true: True solution
             x_sol: Final updated solution from RIM
 
-        Return: mse value
+        Return: 
+            mse value
         """
         x_sol = tf.cast(x_sol, tf.float32)
         y_true = tf.cast(y_true, tf.float32)
@@ -186,7 +197,6 @@ class RIM(tf.keras.Model):
     def train_step(self, step, x, y, model, A, C, batch_size):
         """
         Test network on training data
-
 
         Args:
             step: Current time step
@@ -199,6 +209,7 @@ class RIM(tf.keras.Model):
 
         Return:
             train_loss_fun: Loss function vald for training set batch
+
         """
         x = tf.cast(x, dtype=tf.float32)
         # Initialize States
@@ -234,7 +245,6 @@ class RIM(tf.keras.Model):
         """
         Test network on validation data  (no training)
 
-
         Args:
             step: Current time step
             x: Batched true spectra for validation set
@@ -247,6 +257,7 @@ class RIM(tf.keras.Model):
         Return:
             val_loss_fun: Loss function vald for validation set batch
             sol_t: Updated solution given the validation step
+
         """
         # Initialize States
         state1, state2 = self.init_states(batch_size)
@@ -268,7 +279,6 @@ class RIM(tf.keras.Model):
         """
         Test network on test data  (no training)
 
-
         Args:
             step: Current time step
             y: Batched observed spectra for test set
@@ -279,6 +289,7 @@ class RIM(tf.keras.Model):
 
         Return:
             solution_step: Updated solution given the test step
+
         """
         solution_step = []  # Solution at each time step
         # Initialize States
@@ -296,11 +307,19 @@ class RIM(tf.keras.Model):
     def fit(self, batch_size, epochs, train_dataset, val_dataset):
         """
         A full training and validation algorithm
+
         Args:
             batch_size: number of batches (int)
             epochs: number of epochs (int)
             train_dataset: batched training set (X_train, Y_train, A_train, C_train)
             val_dataset: batched validation set (X_valid, Y_valid, A_valid, C_valid)
+        
+        Return:
+            ysol: Solution vectors for validation set (batch, timesteps, values)
+            training_loss_values: Vector of training loss values
+            valid_loss_values: Vector of validation loss values
+            learning_rate_values: Vector of learning rate values
+
         """
         #self.log.write('Starting log at %s\n'%((time.strftime("%H:%M:%S", start_total))))
         start_total = time.time()  # Training start time
@@ -402,6 +421,8 @@ class RIM(tf.keras.Model):
         Args:
             test_dataset: batch test set (X_test, Y_test, A_test)
 
+        Return:
+            solutions: Solution vector of the form (test_number, timesteps, vector)
         """
         solutions = []  # List containing all the solutions at each timestep
         for test_batch_step, (y_batch_test, a_batch_test, c_batch_test) in enumerate(test_dataset):

@@ -24,17 +24,28 @@ class RIM_Model_1D(tf.keras.Model):
 
     def call(self, sol, log_L, states1=None, states2=None, return_state=True, training=False):
         """
-        A single run through the recurrent inference machine
+        A single run through the recurrent inference machine. This is the standard architecture.
+
+
         conv2d -> gru -> conv2d_T -> gru -> conv2d
+
+
         When we go from a convolutional layer to a GRU, we need to first flatten the activation map. We then use the
         expand_dims function to make sure the input of the GRU has the correct format (batch length, feature dims, 1).
+
         Args:
+
             sol: solution at time step t (x_t)
             log_L: Gradient of log likelihood
             states1: Hidden state of gru 1
             states2: Hidden state of gru 2
             return_state: Return the hidden state boolean
             training: Boolean determining whether or not the layer acts in training or inference mode
+
+        Return:
+            x: value of delta x 
+            states1: State vector one (optional)
+            states2: State vector two (optional)
         """
         sol = tf.expand_dims(sol, -1)
         log_L = tf.expand_dims(log_L, -1)

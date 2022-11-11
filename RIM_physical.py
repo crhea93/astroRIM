@@ -7,11 +7,15 @@ import numpy as np
 def calc_grad(Y, A, C_N, x):
     """
     Calculate gradient of log likelihood function
+
     Args:
-        Y - True "unconvolved" model
-        A - Convolution matrix
-        C_N - Covariance Matrix of Noise
-        x - Current solution calculated from RIM
+        Y: True "unconvolved" model
+        A: Convolution matrix
+        C_N: Covariance Matrix of Noise
+        x: Current solution calculated from RIM
+    
+    Return:
+        asinh of the gradient 
     """
     x = tf.cast(x, tf.float32)
     A = tf.cast(A, tf.float32)
