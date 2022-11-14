@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>RIM Physical &#8212; astroRIM  documentation</title>
+    <title>Welcome to astroRIM’s documentation! &#8212; astroRIM  documentation</title>
     
   <link rel="stylesheet" href="_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -44,8 +44,7 @@
     <script src="_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Recurrent Inference Machines" href="Notebooks/RIM-Test-1D-Gaussians.html" />
-    <link rel="prev" title="RIM Model" href="rim_model.html" />
+    <link rel="next" title="RIM Sequence" href="rim_sequence.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -62,7 +61,7 @@
 <div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
     
         <div class="navbar-brand-box">
-<a class="navbar-brand text-wrap" href="index.html">
+<a class="navbar-brand text-wrap" href="#">
   
   
   <h1 class="site-logo" id="site-title">astroRIM  documentation</h1>
@@ -78,7 +77,7 @@
   Contents:
  </span>
 </p>
-<ul class="current nav sidenav_l1">
+<ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="rim_sequence.html">
    RIM Sequence
@@ -89,8 +88,8 @@
    RIM Model
   </a>
  </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+ <li class="toctree-l1">
+  <a class="reference internal" href="rim_physical.html">
    RIM Physical
   </a>
  </li>
@@ -103,7 +102,7 @@
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="Notebooks/RIM-Test-1D-Gaussians.html">
-   Recurrent Inference Machines
+   1D Noisy Gaussian Deconvolution
   </a>
  </li>
 </ul>
@@ -146,7 +145,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/rim_physical.rst.txt"><button type="button"
+        <a class="dropdown-buttons" href="_sources/index.rst.txt"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.rst</button></a>
         <!-- Download PDF via print -->
@@ -177,13 +176,21 @@
         </div>
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#RIM_physical.calc_grad">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     calc_grad()
-    </span>
-   </code>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Welcome to astroRIM’s documentation!
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#examples">
+     Examples
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#indices-and-tables">
+   Indices and tables
   </a>
  </li>
 </ul>
@@ -198,28 +205,57 @@
         
               <div>
                 
-  <section id="module-RIM_physical">
-<span id="rim-physical"></span><h1>RIM Physical<a class="headerlink" href="#module-RIM_physical" title="Permalink to this heading">¶</a></h1>
-<p>Gradient calculations</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="RIM_physical.calc_grad">
-<span class="sig-prename descclassname"><span class="pre">RIM_physical.</span></span><span class="sig-name descname"><span class="pre">calc_grad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C_N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#RIM_physical.calc_grad" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate gradient of log likelihood function</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>Y</strong> – True “unconvolved” model</p></li>
-<li><p><strong>A</strong> – Convolution matrix</p></li>
-<li><p><strong>C_N</strong> – Covariance Matrix of Noise</p></li>
-<li><p><strong>x</strong> – Current solution calculated from RIM</p></li>
+  <section id="welcome-to-astrorim-s-documentation">
+<h1>Welcome to astroRIM’s documentation!<a class="headerlink" href="#welcome-to-astrorim-s-documentation" title="Permalink to this heading">¶</a></h1>
+<p>astroRIM is an easy-to-modify python module that enables users to employ the recurrent inference machine (RIM) for 1D and 2D problems in a modular manner.
+Users are provided with a standard set of 1D and 2D RIM configurations and likelihood modules; however, these can readily be modified to fit the user’s specific architecture.</p>
+<p>In this documentation, you will find the outline of the methodology of the RIM. Additionally, you will be able to see the standard architectures and how
+to quickly build your own. Examples include using a RIM to solve a 1D and 2D denconvolution problem.</p>
+<p>You can find the API documentation here as well.</p>
+<p>Users are strongly encouraged to use <cite>run_RIM.py</cite> as a template for training and testing the RIM since it contains all the required calls and creates
+plots for the training vs. validation loss, the learning rate, and an example solution from the test set. We have also included an ipython notebook to
+analyse the results of a trained RIM in <cite>Notebooks/Analysis.ipynb</cite>. Other example notebooks can be found in the directory entitled <cite>Notebooks</cite>.</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rim_sequence.html">RIM Sequence</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rim_sequence.html#RIM_sequence.RIM"><code class="docutils literal notranslate"><span class="pre">RIM</span></code></a></li>
 </ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>asinh of the gradient</p>
-</dd>
-</dl>
-</dd></dl>
-
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rim_model.html">RIM Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rim_model.html#RIM_model.RIM_Model_1D"><code class="docutils literal notranslate"><span class="pre">RIM_Model_1D</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="rim_model.html#RIM_model.RIM_Model_2D"><code class="docutils literal notranslate"><span class="pre">RIM_Model_2D</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rim_physical.html">RIM Physical</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rim_physical.html#RIM_physical.calc_grad"><code class="docutils literal notranslate"><span class="pre">calc_grad()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h2>
+<blockquote>
+<div><div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Example Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/RIM-Test-1D-Gaussians.html">1D Noisy Gaussian Deconvolution</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Notebooks/RIM-Test-1D-Gaussians.html#Create-Convolved-Image">Create Convolved Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Notebooks/RIM-Test-1D-Gaussians.html#Recurrent-Inference-Machine">Recurrent Inference Machine</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div></blockquote>
+</section>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
 </section>
 
 
@@ -228,8 +264,7 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="rim_model.html" title="previous page">RIM Model</a>
-    <a class='right-next' id="next-link" href="Notebooks/RIM-Test-1D-Gaussians.html" title="next page">Recurrent Inference Machines</a>
+    <a class='right-next' id="next-link" href="rim_sequence.html" title="next page">RIM Sequence</a>
 
         </div>
         
