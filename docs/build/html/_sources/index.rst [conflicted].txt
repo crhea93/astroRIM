@@ -23,6 +23,14 @@ You can find the API documentation here as well.
    rim_model 
    rim_physical
 
+Examples
+^^^^^^^^
+    .. toctree::
+       :maxdepth: 2
+       :caption: Example Modules:
+
+       Notebooks/RIM-Test-1D-Gaussians
+
 
 
 Indices and tables

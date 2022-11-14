@@ -1,0 +1,1126 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Recurrent Inference Machines &#8212; astroRIM  documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.c441f2ba0852f4cabcb80105e3a46ae6.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="RIM Physical" href="../rim_physical.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  
+  <h1 class="site-logo" id="site-title">astroRIM  documentation</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <p class="caption collapsible-parent" role="heading">
+ <span class="caption-text">
+  Contents:
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../rim_sequence.html">
+   RIM Sequence
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../rim_model.html">
+   RIM Model
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../rim_physical.html">
+   RIM Physical
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent" role="heading">
+ <span class="caption-text">
+  Example Modules:
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Recurrent Inference Machines
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/Notebooks/RIM-Test-1D-Gaussians.ipynb.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                    title="Fullscreen mode"><i
+                        class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i>
+            Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#Create-Convolved-Image">
+   Create Convolved Image
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#Recurrent-Inference-Machine">
+   Recurrent Inference Machine
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<section id="Recurrent-Inference-Machines">
+<h1>Recurrent Inference Machines<a class="headerlink" href="#Recurrent-Inference-Machines" title="Permalink to this heading">¶</a></h1>
+<p>In this notebook, I will develop the framework to use a recurrent inference machine to solve a basic 1D deconvolution problem.</p>
+<p>The problem: Given a 1D Gaussian profile convolved with Poisson noise, can we use and RIM to recover the original 1D Gaussian profile.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import matplotlib.pyplot as plt
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
+import time
+import sys
+sys.path.append(&quot;../&quot;)
+from RIM_sequence import RIM
+plt.style.use(&#39;dark.mplstyle&#39;)
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>n = 50  # Size of spectrum
+N = 5000  # Number of spectra
+</pre></div>
+</div>
+</div>
+<section id="Create-Convolved-Image">
+<h2>Create Convolved Image<a class="headerlink" href="#Create-Convolved-Image" title="Permalink to this heading">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def gaussian(x, mu, sig):
+    return 1*np.exp(-np.power(x - mu, 2.) / (2 * np.power(sig, 2.)))
+
+def conv_mat(n):
+    &quot;&quot;&quot;
+    Create convolution matrix that is an identity matrix with noise
+    &quot;&quot;&quot;
+    conv_mat = np.eye(n)+np.random.normal(0, 0.05, (n,n))
+    return conv_mat
+
+def create_convolved(N):
+    &#39;&#39;&#39;
+    Create convolved Gaussian that are 28x28
+    Args:
+     n - number of Gausians
+    Return:
+     gaussians - List of convolved Gaussians
+    &#39;&#39;&#39;
+    a = 0.01  # Powerlaw slope
+    gaussians_initial = []  # List of initial Gaussians
+    powerlaw_conv = []  # List of Powerlaws used in convolution
+    gaussians_final = []  # List of final Gaussians after convolution
+    noise = []  # List of noises added
+    for i in range(N):
+        # Create original 1D Gaussian (32 points)
+        x = np.linspace(-1,1,n)
+        gaus_orig = gaussian(x, np.random.uniform(0,.01), np.random.uniform(0,0.1))
+        gaussians_initial.append(gaus_orig)
+        # Convolve with additional Gaussian
+        conv_mat_ = conv_mat(n)
+        gaus_conv = conv_mat_@gaus_orig
+        # Add noise
+        noise_ = np.random.normal(0,0.1, n)
+        gaus_noise = gaus_conv + noise_
+        gaussians_final.append(gaus_noise)
+        powerlaw_conv.append(conv_mat_)
+        noise.append(noise_)
+
+    return gaussians_initial,gaussians_final,powerlaw_conv,noise
+
+# Create N instances
+gaussians_initial, gaussians_final,powerlaw_conv,noise = create_convolved(N)
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for i in range(5):
+    plt.plot(np.linspace(-1,1,n),gaussians_final[i], label=&#39;Convolved Gaussian %i&#39;%i)
+plt.legend()
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x7fd2df3ad640&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/Notebooks_RIM-Test-1D-Gaussians_5_1.png" src="../_images/Notebooks_RIM-Test-1D-Gaussians_5_1.png" />
+</div>
+</div>
+</section>
+<section id="Recurrent-Inference-Machine">
+<h2>Recurrent Inference Machine<a class="headerlink" href="#Recurrent-Inference-Machine" title="Permalink to this heading">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Create training, validation, and test sets
+train_percentage = 0.7
+valid_percentage = 0.9
+test_percentage = 1.0
+len_X = len(gaussians_initial)
+# Training
+X_train = gaussians_initial[:int(train_percentage*len_X)]
+Y_train = gaussians_final[:int(train_percentage*len_X)]
+A_train = powerlaw_conv[:int(train_percentage*len_X)]
+N_train = noise[:int(train_percentage*len_X)]#[np.diag(noise_val) for noise_val in noise[:int(train_percentage*len_X)]]
+#Validation
+X_valid = gaussians_initial[int(train_percentage*len_X):int(valid_percentage*len_X)]
+Y_valid = gaussians_final[int(train_percentage*len_X):int(valid_percentage*len_X)]
+A_valid = powerlaw_conv[int(train_percentage*len_X):int(valid_percentage*len_X)]
+N_valid = noise[int(train_percentage*len_X):int(valid_percentage*len_X)]#[np.diag(noise_val) for noise_val in noise[int(train_percentage*len_X):int(valid_percentage*len_X)]]
+#Test
+X_test = gaussians_initial[int(valid_percentage*len_X):]
+Y_test = gaussians_final[int(valid_percentage*len_X):]
+A_test = powerlaw_conv[int(valid_percentage*len_X):]
+N_test = noise[int(valid_percentage*len_X):]#[np.diag(noise_val) for noise_val in noise[int(valid_percentage*len_X):]]
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Load model and define hyper parameters
+epochs = 10
+batch_size = 8
+model = RIM(rnn_units1=256, rnn_units2=256, conv_filters=8, kernel_size=2, input_size=n, dimensions=1, t_steps=10, learning_rate=0.005)
+
+# Prepare the training dataset
+train_dataset = tf.data.Dataset.from_tensor_slices((X_train, Y_train, A_train, N_train))
+train_dataset = train_dataset.batch(batch_size, drop_remainder=True)
+train_dataset = train_dataset.prefetch(2)
+# Prepare the validation dataset
+val_dataset = tf.data.Dataset.from_tensor_slices((X_valid, Y_valid, A_valid, N_valid))
+val_dataset = val_dataset.batch(batch_size, drop_remainder=True)
+val_dataset = val_dataset.prefetch(2)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Fit model
+ysol_valid, training_loss, valid_loss, learning_rates = model.fit(batch_size, epochs, train_dataset, val_dataset)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Training epoch: 1::  Completion: 0.00%  ETA 02:08:21  loss: 9.108E-01  MSE: 9.125E-01
+Training epoch: 1::  Completion: 2.29%  ETA 00:10:16  loss: 3.402E-01  MSE: 1.445E+00
+Training epoch: 1::  Completion: 4.58%  ETA 00:15:28  loss: 2.426E-01  MSE: 9.212E-01
+Training epoch: 1::  Completion: 6.86%  ETA 00:10:31  loss: 2.354E-01  MSE: 6.774E-01
+Training epoch: 1::  Completion: 9.15%  ETA 00:10:55  loss: 2.327E-01  MSE: 5.664E-01
+Training epoch: 1::  Completion: 11.44%  ETA 00:10:52  loss: 2.311E-01  MSE: 4.972E-01
+Training epoch: 1::  Completion: 13.73%  ETA 00:08:24  loss: 2.272E-01  MSE: 4.457E-01
+Training epoch: 1::  Completion: 16.02%  ETA 00:08:25  loss: 2.238E-01  MSE: 4.136E-01
+Training epoch: 1::  Completion: 18.31%  ETA 00:10:19  loss: 2.308E-01  MSE: 3.858E-01
+Training epoch: 1::  Completion: 20.59%  ETA 00:06:00  loss: 2.280E-01  MSE: 3.668E-01
+Training epoch: 1::  Completion: 22.88%  ETA 00:09:26  loss: 2.298E-01  MSE: 3.498E-01
+Training epoch: 1::  Completion: 25.17%  ETA 00:08:10  loss: 2.255E-01  MSE: 3.362E-01
+Training epoch: 1::  Completion: 27.46%  ETA 00:07:30  loss: 2.273E-01  MSE: 3.250E-01
+Training epoch: 1::  Completion: 29.75%  ETA 00:09:03  loss: 2.258E-01  MSE: 3.152E-01
+Training epoch: 1::  Completion: 32.04%  ETA 00:08:39  loss: 2.264E-01  MSE: 3.073E-01
+Training epoch: 1::  Completion: 34.32%  ETA 00:07:25  loss: 2.320E-01  MSE: 3.003E-01
+Training epoch: 1::  Completion: 36.61%  ETA 00:10:02  loss: 2.279E-01  MSE: 2.942E-01
+Training epoch: 1::  Completion: 38.90%  ETA 00:06:55  loss: 2.284E-01  MSE: 2.884E-01
+Training epoch: 1::  Completion: 41.19%  ETA 00:07:31  loss: 2.293E-01  MSE: 2.837E-01
+Training epoch: 1::  Completion: 43.48%  ETA 00:07:46  loss: 2.294E-01  MSE: 2.793E-01
+Training epoch: 1::  Completion: 45.77%  ETA 00:06:15  loss: 2.319E-01  MSE: 2.753E-01
+Training epoch: 1::  Completion: 48.05%  ETA 00:06:58  loss: 2.241E-01  MSE: 2.714E-01
+Training epoch: 1::  Completion: 50.34%  ETA 00:06:29  loss: 2.295E-01  MSE: 2.686E-01
+Training epoch: 1::  Completion: 52.63%  ETA 00:05:07  loss: 2.323E-01  MSE: 2.656E-01
+Training epoch: 1::  Completion: 54.92%  ETA 00:05:27  loss: 2.294E-01  MSE: 2.627E-01
+Training epoch: 1::  Completion: 57.21%  ETA 00:05:41  loss: 2.296E-01  MSE: 2.605E-01
+Training epoch: 1::  Completion: 59.50%  ETA 00:05:02  loss: 2.216E-01  MSE: 2.578E-01
+Training epoch: 1::  Completion: 61.78%  ETA 00:04:19  loss: 2.300E-01  MSE: 2.556E-01
+Training epoch: 1::  Completion: 64.07%  ETA 00:03:52  loss: 2.297E-01  MSE: 2.540E-01
+Training epoch: 1::  Completion: 66.36%  ETA 00:03:25  loss: 2.275E-01  MSE: 2.519E-01
+Training epoch: 1::  Completion: 68.65%  ETA 00:04:15  loss: 2.270E-01  MSE: 2.502E-01
+Training epoch: 1::  Completion: 70.94%  ETA 00:03:34  loss: 2.281E-01  MSE: 2.484E-01
+Training epoch: 1::  Completion: 73.23%  ETA 00:03:27  loss: 2.245E-01  MSE: 2.467E-01
+Training epoch: 1::  Completion: 75.51%  ETA 00:04:30  loss: 2.301E-01  MSE: 2.456E-01
+Training epoch: 1::  Completion: 77.80%  ETA 00:02:33  loss: 2.268E-01  MSE: 2.442E-01
+Training epoch: 1::  Completion: 80.09%  ETA 00:02:48  loss: 2.262E-01  MSE: 2.431E-01
+Training epoch: 1::  Completion: 82.38%  ETA 00:02:17  loss: 2.235E-01  MSE: 2.416E-01
+Training epoch: 1::  Completion: 84.67%  ETA 00:02:09  loss: 2.240E-01  MSE: 2.404E-01
+Training epoch: 1::  Completion: 86.96%  ETA 00:01:49  loss: 2.256E-01  MSE: 2.393E-01
+Training epoch: 1::  Completion: 89.24%  ETA 00:01:32  loss: 2.237E-01  MSE: 2.382E-01
+Training epoch: 1::  Completion: 91.53%  ETA 00:01:10  loss: 2.215E-01  MSE: 2.372E-01
+Training epoch: 1::  Completion: 93.82%  ETA 00:00:51  loss: 2.291E-01  MSE: 2.363E-01
+Training epoch: 1::  Completion: 96.11%  ETA 00:00:22  loss: 2.199E-01  MSE: 2.349E-01
+Training epoch: 1::  Completion: 98.40%  ETA 00:00:09  loss: 2.271E-01  MSE: 2.343E-01
+Validation epoch: 1::  Completion: 0.00%  ETA: 00:30:31  train_loss: 2.204E-01  train_MSE: 2.337E-01  val_loss: 2.944E-01 val_MSE: 2.944E-01
+Validation epoch: 1::  Completion: 2.29%  ETA: 00:02:09  train_loss: 2.204E-01  train_MSE: 2.337E-01  val_loss: 2.558E-01 val_MSE: 2.628E-01
+Validation epoch: 1::  Completion: 4.58%  ETA: 00:01:59  train_loss: 2.204E-01  train_MSE: 2.337E-01  val_loss: 2.890E-01 val_MSE: 2.619E-01
+Validation epoch: 1::  Completion: 6.86%  ETA: 00:02:36  train_loss: 2.204E-01  train_MSE: 2.337E-01  val_loss: 2.844E-01 val_MSE: 2.626E-01
+Validation epoch: 1::  Completion: 9.15%  ETA: 00:02:38  train_loss: 2.204E-01  train_MSE: 2.337E-01  val_loss: 2.817E-01 val_MSE: 2.614E-01
+Validation epoch: 1::  Completion: 11.44%  ETA: 00:02:01  train_loss: 2.204E-01  train_MSE: 2.337E-01  val_loss: 2.458E-01 val_MSE: 2.610E-01
+Validation epoch: 1::  Completion: 13.73%  ETA: 00:02:08  train_loss: 2.204E-01  train_MSE: 2.337E-01  val_loss: 2.768E-01 val_MSE: 2.606E-01
+Validation epoch: 1::  Completion: 16.02%  ETA: 00:01:46  train_loss: 2.204E-01  train_MSE: 2.337E-01  val_loss: 2.811E-01 val_MSE: 2.595E-01
+Validation epoch: 1::  Completion: 18.31%  ETA: 00:01:49  train_loss: 2.204E-01  train_MSE: 2.337E-01  val_loss: 2.782E-01 val_MSE: 2.596E-01
+Validation epoch: 1::  Completion: 20.59%  ETA: 00:01:51  train_loss: 2.204E-01  train_MSE: 2.337E-01  val_loss: 2.982E-01 val_MSE: 2.606E-01
+Validation epoch: 1::  Completion: 22.88%  ETA: 00:01:48  train_loss: 2.204E-01  train_MSE: 2.337E-01  val_loss: 2.173E-01 val_MSE: 2.601E-01
+Validation epoch: 1::  Completion: 25.17%  ETA: 00:01:36  train_loss: 2.204E-01  train_MSE: 2.337E-01  val_loss: 2.807E-01 val_MSE: 2.606E-01
+Validation epoch: 1::  Completion: 27.46%  ETA: 00:01:34  train_loss: 2.204E-01  train_MSE: 2.337E-01  val_loss: 2.806E-01 val_MSE: 2.611E-01
+Validation epoch: 1::  Completion: 100.00%  ETA: 0  train_loss: 2.204E-01  train_MSE: 2.337E-01  val_loss: 2.797E-01 val_MSE: 2.612E-01
+
+Training MSE: 0.2337
+Validation MSE: 0.2612
+Time taken on epoch: 00:13:42 seconds
+
+
+Training epoch: 2::  Completion: 0.00%  ETA 00:11:53  loss: 2.247E-01  MSE: 2.741E-01
+Training epoch: 2::  Completion: 2.29%  ETA 00:10:41  loss: 2.217E-01  MSE: 1.936E-01
+Training epoch: 2::  Completion: 4.58%  ETA 00:09:43  loss: 2.181E-01  MSE: 1.921E-01
+Training epoch: 2::  Completion: 6.86%  ETA 00:09:00  loss: 2.131E-01  MSE: 1.919E-01
+Training epoch: 2::  Completion: 9.15%  ETA 00:09:22  loss: 1.986E-01  MSE: 1.924E-01
+Training epoch: 2::  Completion: 11.44%  ETA 02:08:51  loss: 1.576E-01  MSE: 1.930E-01
+Training epoch: 2::  Completion: 13.73%  ETA 00:11:45  loss: 1.624E-01  MSE: 1.877E-01
+Training epoch: 2::  Completion: 16.02%  ETA 00:07:10  loss: 1.045E-01  MSE: 1.843E-01
+Training epoch: 2::  Completion: 18.31%  ETA 00:07:37  loss: 7.980E-01  MSE: 2.686E-01
+Training epoch: 2::  Completion: 20.59%  ETA 00:08:31  loss: 3.719E-01  MSE: 3.522E-01
+Training epoch: 2::  Completion: 22.88%  ETA 00:06:32  loss: 2.031E-01  MSE: 3.499E-01
+Training epoch: 2::  Completion: 25.17%  ETA 00:06:34  loss: 1.953E-01  MSE: 3.337E-01
+Training epoch: 2::  Completion: 27.46%  ETA 00:06:20  loss: 1.797E-01  MSE: 3.179E-01
+Training epoch: 2::  Completion: 29.75%  ETA 00:07:01  loss: 1.461E-01  MSE: 3.032E-01
+Training epoch: 2::  Completion: 32.04%  ETA 00:05:57  loss: 1.302E-01  MSE: 2.882E-01
+Training epoch: 2::  Completion: 34.32%  ETA 00:05:44  loss: 1.243E-01  MSE: 2.744E-01
+Training epoch: 2::  Completion: 36.61%  ETA 00:05:58  loss: 1.066E-01  MSE: 2.617E-01
+Training epoch: 2::  Completion: 38.90%  ETA 00:05:04  loss: 9.793E-02  MSE: 2.506E-01
+Training epoch: 2::  Completion: 41.19%  ETA 00:05:08  loss: 1.356E-01  MSE: 2.420E-01
+Training epoch: 2::  Completion: 43.48%  ETA 00:05:04  loss: 1.726E-01  MSE: 2.389E-01
+Training epoch: 2::  Completion: 45.77%  ETA 00:05:05  loss: 1.155E-01  MSE: 2.321E-01
+Training epoch: 2::  Completion: 48.05%  ETA 00:04:34  loss: 8.796E-02  MSE: 2.243E-01
+Training epoch: 2::  Completion: 50.34%  ETA 00:04:16  loss: 1.014E-01  MSE: 2.178E-01
+Training epoch: 2::  Completion: 52.63%  ETA 00:03:54  loss: 1.009E-01  MSE: 2.117E-01
+Training epoch: 2::  Completion: 54.92%  ETA 00:04:02  loss: 9.465E-02  MSE: 2.060E-01
+Training epoch: 2::  Completion: 57.21%  ETA 00:04:27  loss: 1.033E-01  MSE: 2.009E-01
+Training epoch: 2::  Completion: 59.50%  ETA 00:03:33  loss: 9.964E-02  MSE: 1.962E-01
+Training epoch: 2::  Completion: 61.78%  ETA 00:03:28  loss: 9.632E-02  MSE: 1.917E-01
+Training epoch: 2::  Completion: 64.07%  ETA 00:03:18  loss: 9.501E-02  MSE: 1.874E-01
+Training epoch: 2::  Completion: 66.36%  ETA 00:03:02  loss: 9.563E-02  MSE: 1.834E-01
+Training epoch: 2::  Completion: 68.65%  ETA 00:02:51  loss: 9.256E-02  MSE: 1.799E-01
+Training epoch: 2::  Completion: 70.94%  ETA 00:02:38  loss: 9.595E-02  MSE: 1.773E-01
+Training epoch: 2::  Completion: 73.23%  ETA 00:02:17  loss: 8.397E-02  MSE: 1.743E-01
+Training epoch: 2::  Completion: 75.51%  ETA 00:02:03  loss: 1.068E-01  MSE: 1.716E-01
+Training epoch: 2::  Completion: 77.80%  ETA 00:01:56  loss: 8.868E-02  MSE: 1.692E-01
+Training epoch: 2::  Completion: 80.09%  ETA 00:01:50  loss: 9.452E-02  MSE: 1.668E-01
+Training epoch: 2::  Completion: 82.38%  ETA 00:01:42  loss: 8.907E-02  MSE: 1.642E-01
+Training epoch: 2::  Completion: 84.67%  ETA 00:01:19  loss: 8.568E-02  MSE: 1.620E-01
+Training epoch: 2::  Completion: 86.96%  ETA 00:01:07  loss: 8.465E-02  MSE: 1.600E-01
+Training epoch: 2::  Completion: 89.24%  ETA 00:01:05  loss: 9.772E-02  MSE: 1.584E-01
+Training epoch: 2::  Completion: 91.53%  ETA 00:00:46  loss: 8.100E-02  MSE: 1.564E-01
+Training epoch: 2::  Completion: 93.82%  ETA 00:00:32  loss: 1.008E-01  MSE: 1.544E-01
+Training epoch: 2::  Completion: 96.11%  ETA 00:00:20  loss: 7.253E-02  MSE: 1.524E-01
+Training epoch: 2::  Completion: 98.40%  ETA 00:00:09  loss: 8.297E-02  MSE: 1.504E-01
+Validation epoch: 2::  Completion: 0.00%  ETA: 00:02:37  train_loss: 6.932E-02  train_MSE: 1.491E-01  val_loss: 7.260E-02 val_MSE: 7.260E-02
+Validation epoch: 2::  Completion: 2.29%  ETA: 00:02:13  train_loss: 6.932E-02  train_MSE: 1.491E-01  val_loss: 5.593E-02 val_MSE: 6.050E-02
+Validation epoch: 2::  Completion: 4.58%  ETA: 00:02:28  train_loss: 6.932E-02  train_MSE: 1.491E-01  val_loss: 6.819E-02 val_MSE: 5.975E-02
+Validation epoch: 2::  Completion: 6.86%  ETA: 00:02:01  train_loss: 6.932E-02  train_MSE: 1.491E-01  val_loss: 6.706E-02 val_MSE: 5.997E-02
+Validation epoch: 2::  Completion: 9.15%  ETA: 00:01:59  train_loss: 6.932E-02  train_MSE: 1.491E-01  val_loss: 6.375E-02 val_MSE: 5.917E-02
+Validation epoch: 2::  Completion: 11.44%  ETA: 00:01:59  train_loss: 6.932E-02  train_MSE: 1.491E-01  val_loss: 5.521E-02 val_MSE: 5.919E-02
+Validation epoch: 2::  Completion: 13.73%  ETA: 00:01:59  train_loss: 6.932E-02  train_MSE: 1.491E-01  val_loss: 6.952E-02 val_MSE: 5.922E-02
+Validation epoch: 2::  Completion: 16.02%  ETA: 00:01:47  train_loss: 6.932E-02  train_MSE: 1.491E-01  val_loss: 7.124E-02 val_MSE: 5.874E-02
+Validation epoch: 2::  Completion: 18.31%  ETA: 00:01:47  train_loss: 6.932E-02  train_MSE: 1.491E-01  val_loss: 6.247E-02 val_MSE: 5.878E-02
+Validation epoch: 2::  Completion: 20.59%  ETA: 00:01:42  train_loss: 6.932E-02  train_MSE: 1.491E-01  val_loss: 7.446E-02 val_MSE: 5.923E-02
+Validation epoch: 2::  Completion: 22.88%  ETA: 00:01:52  train_loss: 6.932E-02  train_MSE: 1.491E-01  val_loss: 3.869E-02 val_MSE: 5.896E-02
+Validation epoch: 2::  Completion: 25.17%  ETA: 00:01:42  train_loss: 6.932E-02  train_MSE: 1.491E-01  val_loss: 6.685E-02 val_MSE: 5.919E-02
+Validation epoch: 2::  Completion: 27.46%  ETA: 00:01:32  train_loss: 6.932E-02  train_MSE: 1.491E-01  val_loss: 6.352E-02 val_MSE: 5.926E-02
+Validation epoch: 2::  Completion: 100.00%  ETA: 0  train_loss: 6.932E-02  train_MSE: 1.491E-01  val_loss: 6.548E-02 val_MSE: 5.933E-02
+
+Training MSE: 0.1491
+Validation MSE: 0.0593
+Time taken on epoch: 00:13:27 seconds
+
+
+Training epoch: 3::  Completion: 0.00%  ETA 00:10:47  loss: 8.075E-02  MSE: 6.084E-02
+Training epoch: 3::  Completion: 2.29%  ETA 00:08:25  loss: 8.308E-02  MSE: 6.726E-02
+Training epoch: 3::  Completion: 4.58%  ETA 00:08:53  loss: 8.021E-02  MSE: 6.250E-02
+Training epoch: 3::  Completion: 6.86%  ETA 00:07:42  loss: 6.948E-02  MSE: 6.168E-02
+Training epoch: 3::  Completion: 9.15%  ETA 00:07:49  loss: 9.071E-02  MSE: 6.465E-02
+Training epoch: 3::  Completion: 11.44%  ETA 00:07:37  loss: 7.119E-02  MSE: 6.515E-02
+Training epoch: 3::  Completion: 13.73%  ETA 00:08:46  loss: 5.727E-02  MSE: 6.593E-02
+Training epoch: 3::  Completion: 16.02%  ETA 00:07:21  loss: 6.228E-02  MSE: 6.701E-02
+Training epoch: 3::  Completion: 18.31%  ETA 00:07:34  loss: 9.380E-02  MSE: 6.980E-02
+Training epoch: 3::  Completion: 20.59%  ETA 00:10:08  loss: 7.080E-02  MSE: 6.942E-02
+Training epoch: 3::  Completion: 22.88%  ETA 00:06:43  loss: 7.954E-02  MSE: 6.908E-02
+Training epoch: 3::  Completion: 25.17%  ETA 00:07:20  loss: 6.495E-02  MSE: 6.844E-02
+Training epoch: 3::  Completion: 27.46%  ETA 00:06:14  loss: 8.732E-02  MSE: 6.924E-02
+Training epoch: 3::  Completion: 29.75%  ETA 00:06:27  loss: 7.201E-02  MSE: 7.030E-02
+Training epoch: 3::  Completion: 32.04%  ETA 00:06:25  loss: 8.018E-02  MSE: 7.138E-02
+Training epoch: 3::  Completion: 34.32%  ETA 00:05:37  loss: 1.161E-01  MSE: 7.234E-02
+Training epoch: 3::  Completion: 36.61%  ETA 00:06:37  loss: 9.594E-02  MSE: 7.274E-02
+Training epoch: 3::  Completion: 38.90%  ETA 00:05:59  loss: 7.973E-02  MSE: 7.289E-02
+Training epoch: 3::  Completion: 41.19%  ETA 00:05:12  loss: 6.989E-02  MSE: 7.186E-02
+Training epoch: 3::  Completion: 43.48%  ETA 00:04:58  loss: 7.354E-02  MSE: 7.116E-02
+Training epoch: 3::  Completion: 45.77%  ETA 00:05:02  loss: 7.142E-02  MSE: 7.012E-02
+Training epoch: 3::  Completion: 48.05%  ETA 00:05:30  loss: 8.789E-02  MSE: 7.101E-02
+Training epoch: 3::  Completion: 50.34%  ETA 00:04:20  loss: 5.664E-02  MSE: 7.098E-02
+Training epoch: 3::  Completion: 52.63%  ETA 00:04:39  loss: 5.610E-02  MSE: 7.073E-02
+Training epoch: 3::  Completion: 54.92%  ETA 00:03:53  loss: 4.842E-02  MSE: 6.968E-02
+Training epoch: 3::  Completion: 57.21%  ETA 00:03:35  loss: 5.012E-02  MSE: 6.845E-02
+Training epoch: 3::  Completion: 59.50%  ETA 00:03:43  loss: 3.724E-02  MSE: 6.733E-02
+Training epoch: 3::  Completion: 61.78%  ETA 00:03:32  loss: 4.834E-02  MSE: 6.658E-02
+Training epoch: 3::  Completion: 64.07%  ETA 00:03:14  loss: 4.793E-02  MSE: 6.576E-02
+Training epoch: 3::  Completion: 66.36%  ETA 00:03:03  loss: 4.073E-02  MSE: 6.503E-02
+Training epoch: 3::  Completion: 68.65%  ETA 00:02:59  loss: 4.399E-02  MSE: 6.431E-02
+Training epoch: 3::  Completion: 70.94%  ETA 00:02:36  loss: 6.994E-02  MSE: 6.418E-02
+Training epoch: 3::  Completion: 73.23%  ETA 00:02:20  loss: 3.588E-02  MSE: 6.340E-02
+Training epoch: 3::  Completion: 75.51%  ETA 00:02:12  loss: 4.884E-02  MSE: 6.262E-02
+Training epoch: 3::  Completion: 77.80%  ETA 00:02:01  loss: 4.040E-02  MSE: 6.196E-02
+Training epoch: 3::  Completion: 80.09%  ETA 00:02:17  loss: 4.229E-02  MSE: 6.127E-02
+Training epoch: 3::  Completion: 82.38%  ETA 00:01:35  loss: 3.951E-02  MSE: 6.061E-02
+Training epoch: 3::  Completion: 84.67%  ETA 00:01:20  loss: 3.912E-02  MSE: 6.016E-02
+Training epoch: 3::  Completion: 86.96%  ETA 00:01:11  loss: 4.060E-02  MSE: 5.959E-02
+Training epoch: 3::  Completion: 89.24%  ETA 00:00:58  loss: 3.816E-02  MSE: 5.913E-02
+Training epoch: 3::  Completion: 91.53%  ETA 00:00:49  loss: 4.074E-02  MSE: 5.877E-02
+Training epoch: 3::  Completion: 93.82%  ETA 00:00:33  loss: 5.375E-02  MSE: 5.827E-02
+Training epoch: 3::  Completion: 96.11%  ETA 00:00:20  loss: 3.156E-02  MSE: 5.775E-02
+Training epoch: 3::  Completion: 98.40%  ETA 00:00:08  loss: 3.974E-02  MSE: 5.720E-02
+Validation epoch: 3::  Completion: 0.00%  ETA: 00:02:33  train_loss: 3.254E-02  train_MSE: 5.685E-02  val_loss: 3.640E-02 val_MSE: 3.640E-02
+Validation epoch: 3::  Completion: 2.29%  ETA: 00:03:01  train_loss: 3.254E-02  train_MSE: 5.685E-02  val_loss: 3.007E-02 val_MSE: 2.994E-02
+Validation epoch: 3::  Completion: 4.58%  ETA: 00:02:04  train_loss: 3.254E-02  train_MSE: 5.685E-02  val_loss: 3.527E-02 val_MSE: 2.960E-02
+Validation epoch: 3::  Completion: 6.86%  ETA: 00:02:33  train_loss: 3.254E-02  train_MSE: 5.685E-02  val_loss: 3.614E-02 val_MSE: 2.994E-02
+Validation epoch: 3::  Completion: 9.15%  ETA: 00:02:38  train_loss: 3.254E-02  train_MSE: 5.685E-02  val_loss: 3.552E-02 val_MSE: 2.976E-02
+Validation epoch: 3::  Completion: 11.44%  ETA: 00:01:59  train_loss: 3.254E-02  train_MSE: 5.685E-02  val_loss: 2.656E-02 val_MSE: 2.968E-02
+Validation epoch: 3::  Completion: 13.73%  ETA: 00:02:07  train_loss: 3.254E-02  train_MSE: 5.685E-02  val_loss: 3.337E-02 val_MSE: 2.957E-02
+Validation epoch: 3::  Completion: 16.02%  ETA: 00:01:49  train_loss: 3.254E-02  train_MSE: 5.685E-02  val_loss: 3.359E-02 val_MSE: 2.930E-02
+Validation epoch: 3::  Completion: 18.31%  ETA: 00:01:53  train_loss: 3.254E-02  train_MSE: 5.685E-02  val_loss: 3.326E-02 val_MSE: 2.930E-02
+Validation epoch: 3::  Completion: 20.59%  ETA: 00:01:42  train_loss: 3.254E-02  train_MSE: 5.685E-02  val_loss: 3.794E-02 val_MSE: 2.952E-02
+Validation epoch: 3::  Completion: 22.88%  ETA: 00:01:36  train_loss: 3.254E-02  train_MSE: 5.685E-02  val_loss: 1.950E-02 val_MSE: 2.941E-02
+Validation epoch: 3::  Completion: 25.17%  ETA: 00:01:34  train_loss: 3.254E-02  train_MSE: 5.685E-02  val_loss: 3.450E-02 val_MSE: 2.957E-02
+Validation epoch: 3::  Completion: 27.46%  ETA: 00:01:32  train_loss: 3.254E-02  train_MSE: 5.685E-02  val_loss: 3.320E-02 val_MSE: 2.965E-02
+Validation epoch: 3::  Completion: 100.00%  ETA: 0  train_loss: 3.254E-02  train_MSE: 5.685E-02  val_loss: 3.345E-02 val_MSE: 2.966E-02
+
+Training MSE: 0.0568
+Validation MSE: 0.0297
+Time taken on epoch: 00:09:52 seconds
+
+
+Training epoch: 4::  Completion: 0.00%  ETA 00:09:56  loss: 3.946E-02  MSE: 3.138E-02
+Training epoch: 4::  Completion: 2.29%  ETA 00:08:12  loss: 3.926E-02  MSE: 3.508E-02
+Training epoch: 4::  Completion: 4.58%  ETA 00:08:40  loss: 4.004E-02  MSE: 3.471E-02
+Training epoch: 4::  Completion: 6.86%  ETA 00:08:13  loss: 3.652E-02  MSE: 3.486E-02
+Training epoch: 4::  Completion: 9.15%  ETA 00:08:34  loss: 3.650E-02  MSE: 3.518E-02
+Training epoch: 4::  Completion: 11.44%  ETA 00:09:07  loss: 3.803E-02  MSE: 3.439E-02
+Training epoch: 4::  Completion: 13.73%  ETA 00:07:21  loss: 3.308E-02  MSE: 3.719E-02
+Training epoch: 4::  Completion: 16.02%  ETA 00:08:04  loss: 3.689E-02  MSE: 3.696E-02
+Training epoch: 4::  Completion: 18.31%  ETA 00:06:57  loss: 4.166E-02  MSE: 3.678E-02
+Training epoch: 4::  Completion: 20.59%  ETA 00:06:47  loss: 3.543E-02  MSE: 3.645E-02
+Training epoch: 4::  Completion: 22.88%  ETA 00:07:27  loss: 4.147E-02  MSE: 3.635E-02
+Training epoch: 4::  Completion: 25.17%  ETA 00:07:37  loss: 3.631E-02  MSE: 3.619E-02
+Training epoch: 4::  Completion: 27.46%  ETA 00:07:11  loss: 3.287E-02  MSE: 3.625E-02
+Training epoch: 4::  Completion: 29.75%  ETA 00:06:18  loss: 3.375E-02  MSE: 3.607E-02
+Training epoch: 4::  Completion: 32.04%  ETA 00:06:04  loss: 3.761E-02  MSE: 3.591E-02
+Training epoch: 4::  Completion: 34.32%  ETA 00:05:54  loss: 4.782E-02  MSE: 3.678E-02
+Training epoch: 4::  Completion: 36.61%  ETA 00:05:56  loss: 4.813E-02  MSE: 3.826E-02
+Training epoch: 4::  Completion: 38.90%  ETA 00:05:31  loss: 4.750E-02  MSE: 3.882E-02
+Training epoch: 4::  Completion: 41.19%  ETA 00:05:10  loss: 4.055E-02  MSE: 3.886E-02
+Training epoch: 4::  Completion: 43.48%  ETA 00:04:58  loss: 3.594E-02  MSE: 3.886E-02
+Training epoch: 4::  Completion: 45.77%  ETA 00:04:36  loss: 5.149E-02  MSE: 3.901E-02
+Training epoch: 4::  Completion: 48.05%  ETA 00:04:59  loss: 3.343E-02  MSE: 3.977E-02
+Training epoch: 4::  Completion: 50.34%  ETA 00:04:14  loss: 3.838E-02  MSE: 4.018E-02
+Training epoch: 4::  Completion: 52.63%  ETA 00:04:11  loss: 3.617E-02  MSE: 3.980E-02
+Training epoch: 4::  Completion: 54.92%  ETA 00:03:52  loss: 3.323E-02  MSE: 3.959E-02
+Training epoch: 4::  Completion: 57.21%  ETA 00:03:35  loss: 5.072E-02  MSE: 3.973E-02
+Training epoch: 4::  Completion: 59.50%  ETA 00:04:43  loss: 3.179E-02  MSE: 3.983E-02
+Training epoch: 4::  Completion: 61.78%  ETA 00:03:34  loss: 6.607E-02  MSE: 4.019E-02
+Training epoch: 4::  Completion: 64.07%  ETA 00:03:11  loss: 3.352E-02  MSE: 4.018E-02
+Training epoch: 4::  Completion: 66.36%  ETA 00:03:00  loss: 4.131E-02  MSE: 4.013E-02
+Training epoch: 4::  Completion: 68.65%  ETA 00:02:43  loss: 3.366E-02  MSE: 4.007E-02
+Training epoch: 4::  Completion: 70.94%  ETA 00:02:27  loss: 4.299E-02  MSE: 4.065E-02
+Training epoch: 4::  Completion: 73.23%  ETA 00:02:13  loss: 3.137E-02  MSE: 4.073E-02
+Training epoch: 4::  Completion: 75.51%  ETA 00:02:16  loss: 3.403E-02  MSE: 4.038E-02
+Training epoch: 4::  Completion: 77.80%  ETA 00:01:50  loss: 3.648E-02  MSE: 4.010E-02
+Training epoch: 4::  Completion: 80.09%  ETA 00:01:54  loss: 3.938E-02  MSE: 4.046E-02
+Training epoch: 4::  Completion: 82.38%  ETA 00:01:37  loss: 6.247E-02  MSE: 4.110E-02
+Training epoch: 4::  Completion: 84.67%  ETA 00:01:22  loss: 3.536E-02  MSE: 4.131E-02
+Training epoch: 4::  Completion: 86.96%  ETA 00:01:09  loss: 4.178E-02  MSE: 4.137E-02
+Training epoch: 4::  Completion: 89.24%  ETA 00:00:59  loss: 5.882E-02  MSE: 4.172E-02
+Training epoch: 4::  Completion: 91.53%  ETA 00:00:42  loss: 3.158E-02  MSE: 4.162E-02
+Training epoch: 4::  Completion: 93.82%  ETA 00:00:31  loss: 3.093E-02  MSE: 4.129E-02
+Training epoch: 4::  Completion: 96.11%  ETA 00:00:20  loss: 2.547E-02  MSE: 4.096E-02
+Training epoch: 4::  Completion: 98.40%  ETA 00:00:08  loss: 5.346E-02  MSE: 4.081E-02
+Validation epoch: 4::  Completion: 0.00%  ETA: 00:02:43  train_loss: 2.427E-02  train_MSE: 4.057E-02  val_loss: 3.373E-02 val_MSE: 3.373E-02
+Validation epoch: 4::  Completion: 2.29%  ETA: 00:02:03  train_loss: 2.427E-02  train_MSE: 4.057E-02  val_loss: 2.790E-02 val_MSE: 2.770E-02
+Validation epoch: 4::  Completion: 4.58%  ETA: 00:02:09  train_loss: 2.427E-02  train_MSE: 4.057E-02  val_loss: 3.163E-02 val_MSE: 2.728E-02
+Validation epoch: 4::  Completion: 6.86%  ETA: 00:02:18  train_loss: 2.427E-02  train_MSE: 4.057E-02  val_loss: 3.108E-02 val_MSE: 2.751E-02
+Validation epoch: 4::  Completion: 9.15%  ETA: 00:01:57  train_loss: 2.427E-02  train_MSE: 4.057E-02  val_loss: 3.129E-02 val_MSE: 2.732E-02
+Validation epoch: 4::  Completion: 11.44%  ETA: 00:02:02  train_loss: 2.427E-02  train_MSE: 4.057E-02  val_loss: 2.399E-02 val_MSE: 2.718E-02
+Validation epoch: 4::  Completion: 13.73%  ETA: 00:01:56  train_loss: 2.427E-02  train_MSE: 4.057E-02  val_loss: 3.198E-02 val_MSE: 2.705E-02
+Validation epoch: 4::  Completion: 16.02%  ETA: 00:01:47  train_loss: 2.427E-02  train_MSE: 4.057E-02  val_loss: 3.096E-02 val_MSE: 2.691E-02
+Validation epoch: 4::  Completion: 18.31%  ETA: 00:01:56  train_loss: 2.427E-02  train_MSE: 4.057E-02  val_loss: 3.118E-02 val_MSE: 2.690E-02
+Validation epoch: 4::  Completion: 20.59%  ETA: 00:01:52  train_loss: 2.427E-02  train_MSE: 4.057E-02  val_loss: 3.660E-02 val_MSE: 2.712E-02
+Validation epoch: 4::  Completion: 22.88%  ETA: 00:01:38  train_loss: 2.427E-02  train_MSE: 4.057E-02  val_loss: 1.881E-02 val_MSE: 2.699E-02
+Validation epoch: 4::  Completion: 25.17%  ETA: 00:01:38  train_loss: 2.427E-02  train_MSE: 4.057E-02  val_loss: 3.006E-02 val_MSE: 2.711E-02
+Validation epoch: 4::  Completion: 27.46%  ETA: 00:01:41  train_loss: 2.427E-02  train_MSE: 4.057E-02  val_loss: 2.918E-02 val_MSE: 2.718E-02
+Validation epoch: 4::  Completion: 100.00%  ETA: 0  train_loss: 2.427E-02  train_MSE: 4.057E-02  val_loss: 3.005E-02 val_MSE: 2.714E-02
+
+Training MSE: 0.0406
+Validation MSE: 0.0271
+Time taken on epoch: 00:09:50 seconds
+
+
+Training epoch: 5::  Completion: 0.00%  ETA 00:09:42  loss: 2.732E-02  MSE: 2.666E-02
+Training epoch: 5::  Completion: 2.29%  ETA 00:08:40  loss: 2.521E-02  MSE: 3.191E-02
+Training epoch: 5::  Completion: 4.58%  ETA 00:08:01  loss: 3.127E-02  MSE: 3.396E-02
+Training epoch: 5::  Completion: 6.86%  ETA 00:09:48  loss: 2.967E-02  MSE: 3.440E-02
+Training epoch: 5::  Completion: 9.15%  ETA 00:07:59  loss: 6.139E-02  MSE: 4.115E-02
+Training epoch: 5::  Completion: 11.44%  ETA 00:07:52  loss: 6.400E-02  MSE: 4.526E-02
+Training epoch: 5::  Completion: 13.73%  ETA 00:07:58  loss: 2.617E-02  MSE: 4.725E-02
+Training epoch: 5::  Completion: 16.02%  ETA 00:07:13  loss: 3.957E-02  MSE: 4.756E-02
+Training epoch: 5::  Completion: 18.31%  ETA 00:08:16  loss: 4.042E-02  MSE: 4.723E-02
+Training epoch: 5::  Completion: 20.59%  ETA 00:08:13  loss: 2.587E-02  MSE: 4.512E-02
+Training epoch: 5::  Completion: 22.88%  ETA 00:06:33  loss: 3.435E-02  MSE: 4.437E-02
+Training epoch: 5::  Completion: 25.17%  ETA 00:07:01  loss: 4.481E-02  MSE: 4.417E-02
+Training epoch: 5::  Completion: 27.46%  ETA 00:06:24  loss: 4.217E-02  MSE: 4.450E-02
+Training epoch: 5::  Completion: 29.75%  ETA 00:06:03  loss: 3.614E-02  MSE: 4.387E-02
+Training epoch: 5::  Completion: 32.04%  ETA 00:05:58  loss: 2.612E-02  MSE: 4.271E-02
+Training epoch: 5::  Completion: 34.32%  ETA 00:05:57  loss: 3.632E-02  MSE: 4.134E-02
+Training epoch: 5::  Completion: 36.61%  ETA 00:06:03  loss: 2.509E-02  MSE: 4.111E-02
+Training epoch: 5::  Completion: 38.90%  ETA 00:05:25  loss: 2.324E-02  MSE: 4.097E-02
+Training epoch: 5::  Completion: 41.19%  ETA 00:05:35  loss: 3.299E-02  MSE: 4.091E-02
+Training epoch: 5::  Completion: 43.48%  ETA 00:05:16  loss: 2.277E-02  MSE: 4.003E-02
+Training epoch: 5::  Completion: 45.77%  ETA 00:04:58  loss: 2.254E-02  MSE: 3.906E-02
+Training epoch: 5::  Completion: 48.05%  ETA 00:05:12  loss: 2.438E-02  MSE: 3.906E-02
+Training epoch: 5::  Completion: 50.34%  ETA 00:05:18  loss: 3.856E-02  MSE: 3.898E-02
+Training epoch: 5::  Completion: 52.63%  ETA 00:04:42  loss: 3.217E-02  MSE: 3.879E-02
+Training epoch: 5::  Completion: 54.92%  ETA 00:03:46  loss: 2.963E-02  MSE: 3.814E-02
+Training epoch: 5::  Completion: 57.21%  ETA 00:03:39  loss: 2.387E-02  MSE: 3.769E-02
+Training epoch: 5::  Completion: 59.50%  ETA 00:03:25  loss: 2.744E-02  MSE: 3.717E-02
+Training epoch: 5::  Completion: 61.78%  ETA 00:04:04  loss: 4.789E-02  MSE: 3.745E-02
+Training epoch: 5::  Completion: 64.07%  ETA 00:03:20  loss: 3.599E-02  MSE: 3.743E-02
+Training epoch: 5::  Completion: 66.36%  ETA 00:02:53  loss: 2.370E-02  MSE: 3.724E-02
+Training epoch: 5::  Completion: 68.65%  ETA 00:02:56  loss: 2.395E-02  MSE: 3.721E-02
+Training epoch: 5::  Completion: 70.94%  ETA 00:03:18  loss: 2.496E-02  MSE: 3.728E-02
+Training epoch: 5::  Completion: 73.23%  ETA 00:03:11  loss: 3.203E-02  MSE: 3.722E-02
+Training epoch: 5::  Completion: 75.51%  ETA 00:02:45  loss: 3.850E-02  MSE: 3.724E-02
+Training epoch: 5::  Completion: 77.80%  ETA 00:03:09  loss: 4.256E-02  MSE: 3.717E-02
+Training epoch: 5::  Completion: 80.09%  ETA 00:02:03  loss: 2.886E-02  MSE: 3.706E-02
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(np.linspace(-1,1,n), [sol for sol in ysol_valid.numpy()[-1,:]], label=&#39;Predicted&#39;)
+plt.plot(np.linspace(-1,1,n), X_valid[-1], label=&#39;True&#39;)
+plt.legend()
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x7fd2e4c88280&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/Notebooks_RIM-Test-1D-Gaussians_10_1.png" src="../_images/Notebooks_RIM-Test-1D-Gaussians_10_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(np.linspace(0, epochs, epochs), training_loss, label=&#39;training&#39;)
+plt.plot(np.linspace(0, epochs, epochs), valid_loss, label=&#39;validation&#39;)
+plt.legend()
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x7fd2e4bfd490&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/Notebooks_RIM-Test-1D-Gaussians_11_1.png" src="../_images/Notebooks_RIM-Test-1D-Gaussians_11_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#test_dataset = (Y_test, A_test)#tf.data.Dataset.from_tensor_slices((Y_test, A_test))
+test_dataset = tf.data.Dataset.from_tensor_slices((Y_test, A_test, C_test))
+test_dataset = test_dataset.batch(batch_size, drop_remainder=True)
+ysol = model(test_dataset)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
+<span class="ansi-green-intense-fg ansi-bold">/home/carterrhea/Documents/RIM/Notebooks/RIM-Test-1D-Gaussians.ipynb Cell 13</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      &lt;a href=&#39;vscode-notebook-cell:/home/carterrhea/Documents/RIM/Notebooks/RIM-Test-1D-Gaussians.ipynb#X15sZmlsZQ%3D%3D?line=1&#39;&gt;2&lt;/a&gt;</span> test_dataset = tf.data.Dataset.from_tensor_slices((Y_test, A_test))
+<span class="ansi-green-intense-fg ansi-bold">      &lt;a href=&#39;vscode-notebook-cell:/home/carterrhea/Documents/RIM/Notebooks/RIM-Test-1D-Gaussians.ipynb#X15sZmlsZQ%3D%3D?line=2&#39;&gt;3&lt;/a&gt;</span> test_dataset = test_dataset.batch(batch_size, drop_remainder=True)
+<span class="ansi-green-fg">----&gt; &lt;a href=&#39;vscode-notebook-cell:/home/carterrhea/Documents/RIM/Notebooks/RIM-Test-1D-Gaussians.ipynb#X15sZmlsZQ%3D%3D?line=3&#39;&gt;4&lt;/a&gt;</span> ysol = model(test_dataset)
+
+File <span class="ansi-green-fg">~/miniconda3/envs/astro/lib/python3.9/site-packages/tensorflow/python/keras/engine/base_layer.py:1012</span>, in <span class="ansi-cyan-fg">Layer.__call__</span><span class="ansi-blue-fg">(self, *args, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1008</span>   self._maybe_build(inputs)
+<span class="ansi-green-intense-fg ansi-bold">   1010</span> with autocast_variable.enable_auto_cast_variables(
+<span class="ansi-green-intense-fg ansi-bold">   1011</span>     self._compute_dtype_object):
+<span class="ansi-green-fg">-&gt; 1012</span>   outputs = call_fn(inputs, *args, **kwargs)
+<span class="ansi-green-intense-fg ansi-bold">   1014</span> if self._activity_regularizer:
+<span class="ansi-green-intense-fg ansi-bold">   1015</span>   self._handle_activity_regularization(inputs, outputs)
+
+File <span class="ansi-green-fg">~/Documents/RIM/Notebooks/../RIM_sequence.py:401</span>, in <span class="ansi-cyan-fg">RIM.call</span><span class="ansi-blue-fg">(self, test_dataset, training)</span>
+<span class="ansi-green-intense-fg ansi-bold">    393</span> &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">    394</span> A single run through the recurrent inference machine for prediction purposes
+<span class="ansi-green-intense-fg ansi-bold">    395</span>
+<span class="ansi-green-fg">   (...)</span>
+<span class="ansi-green-intense-fg ansi-bold">    398</span>
+<span class="ansi-green-intense-fg ansi-bold">    399</span> &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">    400</span> solutions = []  # List containing all the solutions at each timestep
+<span class="ansi-green-fg">--&gt; 401</span> for test_batch_step, (y_batch_test, a_batch_test, c_batch_test) in enumerate(test_dataset):
+<span class="ansi-green-intense-fg ansi-bold">    402</span>     test_batch_step = tf.convert_to_tensor(test_batch_step, dtype=tf.int32)
+<span class="ansi-green-intense-fg ansi-bold">    403</span>     sol_t = self.test_step(test_batch_step, y_batch_test, self.model, a_batch_test, c_batch_test, batch_size=self.batch_size)
+
+<span class="ansi-red-fg">ValueError</span>: not enough values to unpack (expected 3, got 2)
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#ysol = [val.numpy() for val in ysol[0]]
+ysol_list = []
+for val in ysol:
+    ysol_ = [val.numpy() for val in val]
+    ysol_list.append(ysol_)
+#ysol_list = np.reshape(ysol_list, (10*32, 140))
+print(ysol_list)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(16,8))
+plt.plot(np.linspace(-1,1,n), Y_test[-1], label=&#39;Noisy&#39;, color=indian_red)
+plt.legend(prop={&#39;size&#39;: 20})
+fig.patch.set_facecolor(&#39;white&#39;)
+plt.ylabel(&#39;Normalized y-axis&#39;, fontsize=20)
+plt.xlabel(&#39;X-axis&#39;, fontsize=20)
+plt.xticks(fontsize = 15)
+plt.yticks(fontsize = 15)
+plt.title(&#39;RIM Example using a Noisy Gaussian&#39;)
+#plt.savefig(&#39;Gaussian_noisy.png&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(16,8))
+plt.plot(np.linspace(-1,1,n), Y_test[-1], label=&#39;Noisy&#39;, color=indian_red)
+plt.plot(np.linspace(-1,1,n), X_test[-1], label=&#39;True&#39;, color=&#39;C8&#39;, linewidth=4)
+plt.legend(prop={&#39;size&#39;: 20})
+fig.patch.set_facecolor(&#39;white&#39;)
+plt.ylabel(&#39;Normalized y-axis&#39;, fontsize=20)
+plt.xlabel(&#39;X-axis&#39;, fontsize=20)
+plt.xticks(fontsize = 15)
+plt.yticks(fontsize = 15)
+plt.title(&#39;RIM Example using a Noisy Gaussian&#39;)
+#plt.savefig(&#39;Gaussian_noisy_true.png&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(16,8))
+plt.plot(np.linspace(-1,1,n), Y_test[-1], label=&#39;Noisy&#39;, color=indian_red)
+plt.plot(np.linspace(-1,1,n), X_test[-1], label=&#39;True&#39;, color=&#39;C8&#39;, linewidth=4)
+plt.plot(np.linspace(-1,1,n), ysol_list[-1][-1][-1].reshape(n), label=&#39;Predicted&#39;, linestyle=&#39;dashed&#39;, color=&#39;C6&#39;, linewidth=3)
+plt.legend(prop={&#39;size&#39;: 20})
+fig.patch.set_facecolor(&#39;white&#39;)
+plt.ylabel(&#39;Normalized y-axis&#39;, fontsize=20)
+plt.xlabel(&#39;X-axis&#39;, fontsize=20)
+plt.xticks(fontsize = 15)
+plt.yticks(fontsize = 15)
+plt.title(&#39;RIM Example using a Noisy Gaussian&#39;)
+#plt.savefig(&#39;Gaussian_complete.png&#39;)
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+    <a class='left-prev' id="prev-link" href="../rim_physical.html" title="previous page">RIM Physical</a>
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Carter Rhea & Alexandre Adam<br/>
+        
+            &copy; Copyright 2022, Carter Rhea &amp; Alexandre Adam.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>

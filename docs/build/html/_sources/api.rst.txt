@@ -1,5 +1,0 @@
-API 
-====
-
-.. automodule:: RIM_sequence
-    :members:

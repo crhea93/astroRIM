@@ -15,6 +15,10 @@ to quickly build your own. Examples include using a RIM to solve a 1D and 2D den
 
 You can find the API documentation here as well.
 
+Users are strongly encouraged to use `run_RIM.py` as a template for training and testing the RIM since it contains all the required calls and creates 
+plots for the training vs. validation loss, the learning rate, and an example solution from the test set. We have also included an ipython notebook to
+analyse the results of a trained RIM in `Notebooks/Analysis.ipynb`. Other example notebooks can be found in the directory entitled `Notebooks`.
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -22,6 +26,14 @@ You can find the API documentation here as well.
    rim_sequence
    rim_model 
    rim_physical
+
+Examples
+^^^^^^^^
+    .. toctree::
+       :maxdepth: 2
+       :caption: Example Modules:
+
+       Notebooks/RIM-Test-1D-Gaussians
 
 
 

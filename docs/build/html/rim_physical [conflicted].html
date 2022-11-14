@@ -4,8 +4,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Python Module Index &#8212; astroRIM  documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>RIM Physical &#8212; astroRIM  documentation</title>
     
   <link rel="stylesheet" href="_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -43,17 +44,12 @@
     <script src="_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-
+    <link rel="next" title="Recurrent Inference Machines" href="Notebooks/RIM-Test-1D-Gaussians.html" />
+    <link rel="prev" title="RIM Model" href="rim_model.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
 
-
-
-
-    <script>
-      DOCUMENTATION_OPTIONS.COLLAPSE_INDEX = true;
-    </script>
 
 
   </head>
@@ -82,7 +78,7 @@
   Contents:
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="current nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="rim_sequence.html">
    RIM Sequence
@@ -93,9 +89,21 @@
    RIM Model
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="rim_physical.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    RIM Physical
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent" role="heading">
+ <span class="caption-text">
+  Example Modules:
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Notebooks/RIM-Test-1D-Gaussians.html">
+   Recurrent Inference Machines
   </a>
  </li>
 </ul>
@@ -130,6 +138,23 @@
             </button>
             
             
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/rim_physical.rst.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.rst</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
             <!-- Source interaction buttons -->
 
 
@@ -146,6 +171,25 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i>
+            Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#RIM_physical.calc_grad">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     calc_grad()
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
         </div>
     </div>
 </div>
@@ -154,33 +198,29 @@
         
               <div>
                 
+  <section id="module-RIM_physical">
+<span id="rim-physical"></span><h1>RIM Physical<a class="headerlink" href="#module-RIM_physical" title="Permalink to this heading">¶</a></h1>
+<p>Gradient calculations</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="RIM_physical.calc_grad">
+<span class="sig-prename descclassname"><span class="pre">RIM_physical.</span></span><span class="sig-name descname"><span class="pre">calc_grad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C_N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#RIM_physical.calc_grad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate gradient of log likelihood function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Y</strong> – True “unconvolved” model</p></li>
+<li><p><strong>A</strong> – Convolution matrix</p></li>
+<li><p><strong>C_N</strong> – Covariance Matrix of Noise</p></li>
+<li><p><strong>x</strong> – Current solution calculated from RIM</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>asinh of the gradient</p>
+</dd>
+</dl>
+</dd></dl>
 
-   <h1>Python Module Index</h1>
-
-   <div class="modindex-jumpbox">
-   <a href="#cap-r"><strong>r</strong></a>
-   </div>
-
-   <table class="indextable modindextable">
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-r"><td></td><td>
-       <strong>r</strong></td><td></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="rim_model.html#module-RIM_model"><code class="xref">RIM_model</code></a></td><td>
-       <em></em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="rim_physical.html#module-RIM_physical"><code class="xref">RIM_physical</code></a></td><td>
-       <em></em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="rim_sequence.html#module-RIM_sequence"><code class="xref">RIM_sequence</code></a></td><td>
-       <em></em></td></tr>
-   </table>
+</section>
 
 
               </div>
@@ -188,6 +228,8 @@
         
         <div class='prev-next-bottom'>
             
+    <a class='left-prev' id="prev-link" href="rim_model.html" title="previous page">RIM Model</a>
+    <a class='right-next' id="next-link" href="Notebooks/RIM-Test-1D-Gaussians.html" title="next page">Recurrent Inference Machines</a>
 
         </div>
         
