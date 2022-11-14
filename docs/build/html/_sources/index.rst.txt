@@ -19,9 +19,15 @@ Users are strongly encouraged to use `run_RIM.py` as a template for training and
 plots for the training vs. validation loss, the learning rate, and an example solution from the test set. We have also included an ipython notebook to
 analyse the results of a trained RIM in `Notebooks/Analysis.ipynb`. Other example notebooks can be found in the directory entitled `Notebooks`.
 
+Files to Modify 
+^^^^^^^^^^^^^^^
+If you wish to implement a modified version of the RIM (i.e. not with our standard architecture or not using the standard likelihood function), this can be
+easily done by modifying the following two files: `rim_model.py` and `rim_physical.py`. Please see the page: :doc:`modifications`.
+
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Python Files:
 
    rim_sequence
    rim_model 

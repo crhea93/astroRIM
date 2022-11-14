@@ -77,7 +77,7 @@
 <nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
     <p class="caption collapsible-parent" role="heading">
  <span class="caption-text">
-  Contents:
+  Python Files:
  </span>
 </p>
 <ul class="current nav sidenav_l1">
@@ -321,12 +321,11 @@
                 
   <section id="module-RIM_sequence">
 <span id="rim-sequence"></span><h1>RIM Sequence<a class="headerlink" href="#module-RIM_sequence" title="Permalink to this heading">¶</a></h1>
-<p>Code that calls RIM model and actually trains the RIM</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="RIM_sequence.RIM">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RIM_sequence.</span></span><span class="sig-name descname"><span class="pre">RIM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#RIM_sequence.RIM" title="Permalink to this definition">¶</a></dt>
-<dd><p>Subclass model to create recurrent inference machine
-If the problem is 2D, we assume the input is square</p>
+<dd><p>Subclass model to create recurrent inference machine</p>
+<p>If the problem is 2D, we assume the input is square.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="RIM_sequence.RIM.assign_learning_rate_function">
 <span class="sig-name descname"><span class="pre">assign_learning_rate_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_rate_function</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#RIM_sequence.RIM.assign_learning_rate_function" title="Permalink to this definition">¶</a></dt>
@@ -358,25 +357,27 @@ If the problem is 2D, we assume the input is square</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="RIM_sequence.RIM.exp_decay">
 <span class="sig-name descname"><span class="pre">exp_decay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#RIM_sequence.RIM.exp_decay" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><p>Update the learrning rate at the end of epoch  drop based on the decay equation</p>
-<p>$lpha =</p>
-</div></blockquote>
-<p>rac{lpha_0}{1+eta*floor(epsilon/epoch_drop)}$</p>
-<blockquote>
-<div><dl class="simple">
-<dt>Args:</dt><dd><p>epoch: Current epoch of training (epsilon)</p>
+<dd><p>Update the learrning rate at the end of epoch  drop based on the decay equation</p>
+<div class="math notranslate nohighlight">
+\[\alpha = \frac{\alpha_0}{1+\eta*floor(\epsilon/\text{epoch drop})}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>epoch</strong> – Current epoch of training (epsilon)</p>
 </dd>
-<dt>Return:</dt><dd><p>Updated learning rate</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Updated learning rate</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="RIM_sequence.RIM.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#RIM_sequence.RIM.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>A full training and validation algorithm</p>
+<p>Call with the following</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ysol_valid</span><span class="p">,</span> <span class="n">training_loss</span><span class="p">,</span> <span class="n">valid_loss</span><span class="p">,</span> <span class="n">learning_rates</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">epochs</span><span class="p">,</span> <span class="n">train_dataset</span><span class="p">,</span> <span class="n">val_dataset</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -423,20 +424,17 @@ learning_rate_values: Vector of learning rate values</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="RIM_sequence.RIM.learning_rate_decay">
 <span class="sig-name descname"><span class="pre">learning_rate_decay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#RIM_sequence.RIM.learning_rate_decay" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><p>Update the learrning rate at the end of each epoch based on the decay equation</p>
+<dd><p>Update the learrning rate at the end of each epoch based on the decay equation</p>
 <div class="math notranslate nohighlight">
-\[lpha =\]</div>
-</div></blockquote>
-<p>rac{lpha_0}{1+eta*epsilon}</p>
-<blockquote>
-<div><dl class="simple">
-<dt>Args:</dt><dd><p>epoch: Current epoch of training (epsilon)</p>
+\[\alpha=\frac{\alpha_0}{1+\eta*\epsilon}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>epoch</strong> – Current epoch of training (epsilon)</p>
 </dd>
-<dt>Return:</dt><dd><p>Updated learning rate</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Updated learning rate</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
 <dl class="py method">
@@ -471,7 +469,8 @@ learning_rate_values: Vector of learning rate values</p>
 <dt class="sig sig-object py" id="RIM_sequence.RIM.step_decay">
 <span class="sig-name descname"><span class="pre">step_decay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#RIM_sequence.RIM.step_decay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the learning rate at the end of a given epoch</p>
-<p>$lpha = lpha_0 * eta**floor(epsilon/epoch_drop)$</p>
+<div class="math notranslate nohighlight">
+\[\alpha = \alpha_0 * \eta**floor(\epsilon/\text{epoch drop})\]</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>epoch</strong> – Current epoch of training (epsilon)</p>

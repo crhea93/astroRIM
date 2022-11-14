@@ -1,16 +1,11 @@
-"""
-Code that calls RIM model and actually trains the RIM
-"""
 import numpy as np
 import tensorflow as tf
 import time
-from RIM_model import RIM_Model_1D
-from RIM_physical import calc_grad
+from datetime import datetime
 import sys
 import os
 LOGFLOOR = tf.constant(1e-8, dtype=tf.float32)
 os.environ["TF_GPU_ALLOCATOR"]="cuda_malloc_async"
-
 gpus = tf.config.list_physical_devices('GPU')
 if gpus:
   # Restrict TensorFlow to only allocate 1GB of memory on the first GPU
@@ -27,14 +22,31 @@ if gpus:
 class RIM(tf.keras.Model):
     """
     Subclass model to create recurrent inference machine
-    If the problem is 2D, we assume the input is square
+
+    If the problem is 2D, we assume the input is square.
 
     """
-    def __init__(self, rnn_units1, rnn_units2, conv_filters, kernel_size, input_size, dimensions, t_steps, learning_rate=0.01, decay=0.5, 
+    def __init__(self, rim_model, gradient, input_size, dimensions=1, t_steps=10, learning_rate=0.01, decay=0.5, 
                 patience=10, learning_rate_function='step', epochs_drop=10
                 ):
         """
         Initialize Recurrent Inference Machine
+
+        Args:
+            rim_model: Instance of RIM Model class
+            gradient: Instance of gradient of likelihood function 
+            input_size: Size of input vector
+            dimensions: Number of dimensions of the problem (default 1)
+            t_steps: Number of time steps in RIM (default 10)
+            learning_rate: Initial learning rate value (default 1e-2)
+            decay: Decay rate (default 0.5)
+            patience: Number of epochs to wait before decaying (default 10)
+            learning_rate_function: Function to use to update learning rate (default 'step'; other options are 'exponential' and 'linear')
+            epochs_drop: Number of epochs before decaying the learning rate (only if learning_rate_function='step'; defaut 10)
+
+        Returns:
+            Instance of RIM ready to be fit
+        
         """
         super().__init__(self)
         # Define Optimization Function, Loss Function, and Metrics
@@ -48,20 +60,15 @@ class RIM(tf.keras.Model):
         self.loss_fn = tf.keras.losses.MeanSquaredError()
         self.train_acc_metric = tf.keras.metrics.MeanSquaredError()
         self.val_acc_metric = tf.keras.metrics.MeanSquaredError()
-        self.rnn_units1 = rnn_units1
-        self.rnn_units2 = rnn_units2
-        self.conv_filters = conv_filters
-        self.kernel_size = kernel_size
         self.size_ = input_size  # Size of input for either spectrum or 2D image
         self.dimensions = dimensions  # Number of dimensions in problem
         self.t_steps = t_steps  # Number of time steps (number of times the RIM is run)
-        self.model = RIM_Model_1D(self.conv_filters, self.kernel_size, self.rnn_units1, self.rnn_units2)  # Initialize Model
+        self.model = rim_model#RIM_Model_1D(self.conv_filters, self.kernel_size, self.rnn_units1, self.rnn_units2)  # Initialize Model
         self.batch_size = 1  # Intialize batch size -- will be overwritten in fit function
-
-        self.calc_grad = calc_grad
+        self.calc_grad = gradient
 
         # Setup log file
-        self.log = open('log_%inodes_%itimesteps.txt' % (rnn_units1,  t_steps), 'w+')
+        self.log = open('log_%s.txt' % (datetime.now().strftime("%m%d%Y%H:%M:%S")), 'w+')
 
 
     def init_states(self, batch_size):
@@ -72,17 +79,20 @@ class RIM(tf.keras.Model):
             batch_size: Number of spectra in batch
         
         """
-        h_1 = None
-        h_2 = None
+        #h_1 = None
+        #h_2 = None
         if self.dimensions == 1:
-            h_1 = tf.zeros(shape=(batch_size, self.rnn_units1))
-            h_2 = tf.zeros(shape=(batch_size, self.rnn_units2))
+            # Create the number of hidden states equivalent to the number of GRUs
+            hidden_vectors = [tf.zeros(shape=(batch_size, val)) for val in self.model.rnn_units]
+            #h_1 = tf.zeros(shape=(batch_size, self.rnn_units1))
+            #h_2 = tf.zeros(shape=(batch_size, self.rnn_units2))
         elif self.dimensions == 2:
-            h_1 = tf.zeros(shape=(batch_size, self.rnn_units1, self.rnn_units1))
-            h_2 = tf.zeros(shape=(batch_size, self.rnn_units2, self.rnn_units2))
+            #h_1 = tf.zeros(shape=(batch_size, self.rnn_units1, self.rnn_units1))
+            #h_2 = tf.zeros(shape=(batch_size, self.rnn_units2, self.rnn_units2))
+            hidden_vectors = [tf.zeros(shape=(batch_size, self.model.rnn_units[val], self.model.rnn_units[val])) for val in len(self.model.rnn_units)]
         else:
             print('Please enter a valid dimension size (1 or 2)')
-        return h_1, h_2
+        return hidden_vectors
 
     def init_sol(self, batch_size):
         """
@@ -104,12 +114,11 @@ class RIM(tf.keras.Model):
 
     @tf.function
     def learning_rate_decay(self, epoch):
-        """
+        r"""
         Update the learrning rate at the end of each epoch based on the decay equation
-
-        .. math::
         
-           \alpha = \frac{\alpha_0}{1+\eta*\epsilon}
+        .. math::
+            \alpha=\frac{\alpha_0}{1+\eta*\epsilon}
 
         Args:
             epoch: Current epoch of training (epsilon)
@@ -124,10 +133,11 @@ class RIM(tf.keras.Model):
 
     @tf.function
     def exp_decay(self, epoch):
-        """
+        r"""
         Update the learrning rate at the end of epoch  drop based on the decay equation
 
-        $\alpha = \frac{\alpha_0}{1+\eta*floor(\epsilon/epoch_drop)}$
+        .. math::
+            \alpha = \frac{\alpha_0}{1+\eta*floor(\epsilon/\text{epoch drop})}
 
         Args:
             epoch: Current epoch of training (epsilon)
@@ -142,10 +152,11 @@ class RIM(tf.keras.Model):
 
     #@tf.function
     def step_decay(self, epoch):
-        """
+        r"""
         Update the learning rate at the end of a given epoch 
 
-        $\alpha = \alpha_0 * \eta**floor(\epsilon/epoch_drop)$
+        .. math::
+            \alpha = \alpha_0 * \eta**floor(\epsilon/\text{epoch drop})
 
         Args: 
             epoch: Current epoch of training (epsilon)
@@ -213,7 +224,7 @@ class RIM(tf.keras.Model):
         """
         x = tf.cast(x, dtype=tf.float32)
         # Initialize States
-        state1, state2 = self.init_states(batch_size)
+        hidden_states = self.init_states(batch_size)
         # Initialize Solution
         xi_t = self.init_sol(batch_size)
         train_loss_value = 0  # Initialize training loss
@@ -223,8 +234,8 @@ class RIM(tf.keras.Model):
             for t_step in range(self.t_steps):
                 # Calculate the gradient of the log likelihood function
                 with tape.stop_recording():  # Dont record tape becuase it uneccessarily slows things down and isnt need here!
-                    log_L = calc_grad(y, A, C, xi_t)
-                logits, state1, state2 = model(xi_t, log_L, states1=state1, states2=state2, training=True, return_state=True)  # forward pass
+                    log_L = self.calc_grad(y, A, C, xi_t)
+                logits, hidden_states = model(xi_t, log_L, hidden_states=hidden_states, training=True, return_state=True)  # forward pass
                 xi_t = xi_t + logits  # Update Solution where x_t = del_x + x_(t-1). del_x == logits; x_(t-1) == sol_t
                 train_loss_value += self.mean_mse(x, xi_t)  # compute loss on updated solutions (i.e. at each time step) in neural network space
             train_loss_value /= self.t_steps  # Have to normalize
@@ -260,13 +271,13 @@ class RIM(tf.keras.Model):
 
         """
         # Initialize States
-        state1, state2 = self.init_states(batch_size)
+        hidden_states = self.init_states(batch_size)
         # Initialize Solution
         sol_t = self.init_sol(batch_size)
         # forward pass, no backprop, inference mode  # We run this for the number of time steps in the RIM
         for t_step in range(self.t_steps):
-            log_L = calc_grad(y, A, C, sol_t)
-            val_logits, state1, state2 = model(sol_t, log_L, states1=state1, states2=state2, training=False)
+            log_L = self.calc_grad(y, A, C, sol_t)
+            val_logits, hidden_states = model(sol_t, log_L, hidden_states=hidden_states, training=False)
             sol_t = sol_t + val_logits
         # Compute the loss value
         val_loss_value = self.mean_mse(x, sol_t)
@@ -293,13 +304,13 @@ class RIM(tf.keras.Model):
         """
         solution_step = []  # Solution at each time step
         # Initialize States
-        state1, state2 = self.init_states(batch_size)
+        hidden_states = self.init_states(batch_size)
         # Initialize Solution
         sol_t = self.init_sol(batch_size)
         # forward pass, no backprop, inference mode # We run this for the number of time steps in the RIM
         for t_step in range(self.t_steps):
-            log_L = calc_grad(y, A, C, sol_t)
-            val_logits, state1, state2 = model(sol_t, log_L, states1=state1, states2=state2, training=False)
+            log_L = self.calc_grad(y, A, C, sol_t)
+            val_logits, hidden_states = model(sol_t, log_L, hidden_states=hidden_states, training=False)
             sol_t = sol_t + val_logits
             solution_step.append(sol_t)
         return solution_step
@@ -307,6 +318,10 @@ class RIM(tf.keras.Model):
     def fit(self, batch_size, epochs, train_dataset, val_dataset):
         """
         A full training and validation algorithm
+
+        Call with the following ::
+
+            ysol_valid, training_loss, valid_loss, learning_rates = model.fit(batch_size, epochs, train_dataset, val_dataset)
 
         Args:
             batch_size: number of batches (int)
@@ -443,12 +458,12 @@ class RIM(tf.keras.Model):
         y = test_dataset[0]
         A = test_dataset[1]
         C = test_dataset[2]
-        state1, state2 = self.init_states(1)
+        hidden_states = self.init_states(1)
         # Initialize Solution
         sol_t = self.init_sol(1)
         for t_step in range(self.t_steps):
-            log_L = calc_grad(y, A, C, sol_t)
-            val_logits, state1, state2 = self.model(sol_t, log_L, states1=state1, states2=state2, training=False)
+            log_L = self.calc_grad(y, A, C, sol_t)
+            val_logits, hidden_states = self.model(sol_t, log_L, hidden_states=hidden_states, training=False)
             sol_t = sol_t + val_logits
             solution_steps.append(sol_t)
         return solution_steps
