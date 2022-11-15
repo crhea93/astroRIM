@@ -68,7 +68,7 @@ class RIM(tf.keras.Model):
         self.calc_grad = gradient
 
         # Setup log file
-        self.log = open('log_%s.txt' % (datetime.now().strftime("%m%d%Y%H:%M:%S")), 'w+')
+        self.log = open('log_%s.txt' % (datetime.now().strftime("%m-%d-%Y-%H:%M:%S")), 'w+')
 
 
     def init_states(self, batch_size):
@@ -79,17 +79,12 @@ class RIM(tf.keras.Model):
             batch_size: Number of spectra in batch
         
         """
-        #h_1 = None
-        #h_2 = None
+        hidden_vectors = [None]
         if self.dimensions == 1:
             # Create the number of hidden states equivalent to the number of GRUs
             hidden_vectors = [tf.zeros(shape=(batch_size, val)) for val in self.model.rnn_units]
-            #h_1 = tf.zeros(shape=(batch_size, self.rnn_units1))
-            #h_2 = tf.zeros(shape=(batch_size, self.rnn_units2))
         elif self.dimensions == 2:
-            #h_1 = tf.zeros(shape=(batch_size, self.rnn_units1, self.rnn_units1))
-            #h_2 = tf.zeros(shape=(batch_size, self.rnn_units2, self.rnn_units2))
-            hidden_vectors = [tf.zeros(shape=(batch_size, self.model.rnn_units[val], self.model.rnn_units[val])) for val in len(self.model.rnn_units)]
+            hidden_vectors = [tf.zeros(shape=(batch_size, val)) for val in self.model.rnn_units]
         else:
             print('Please enter a valid dimension size (1 or 2)')
         return hidden_vectors

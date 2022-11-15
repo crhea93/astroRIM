@@ -102,14 +102,15 @@ class RIM_Model_2D(tf.keras.Model):
         self.gru_setup2 = tf.keras.layers.Lambda(lambda x: tf.expand_dims(x, axis=-1))
         self.gru1 = tf.keras.layers.GRU(rnn_units[0], activation='tanh', recurrent_activation='sigmoid',
                                         return_sequences=True, return_state=True)
-        #self.conv_setup1 = tf.keras.layers.Reshape((32, 32, rnn_units1))
+        #self.conv_setup1 = tf.keras.layers.Reshape((10, 10, rnn_units[0]))
         self.conv2d_2 = tf.keras.layers.Conv2DTranspose(filters=conv_filters, kernel_size=kernel_size, strides=(1, 1),
                                                         padding='same', activation='tanh')
         self.gru2 = tf.keras.layers.GRU(rnn_units[1], activation='tanh', recurrent_activation='sigmoid',
                                         return_sequences=True, return_state=True)
         #self.conv_setup2 = tf.keras.layers.Reshape((424, 424, rnn_units2))
         self.conv2d_3 = tf.keras.layers.Conv2D(filters=1, kernel_size=kernel_size, strides=(1, 1),
-                                               padding='valid', activation='linear')
+                                               padding='same', activation='linear')
+        self.rnn_units = rnn_units  # DO NOT CHANGE THIS LINE
 
     def call(self,sol, log_L, hidden_states, return_state=True, training=False):
         """
@@ -125,18 +126,26 @@ class RIM_Model_2D(tf.keras.Model):
             training: Boolean determining whether or not the layer acts in training or inference mode
         """
         [states1, states2] = hidden_states
+        self.conv_setup1 = tf.keras.layers.Reshape((sol[0].shape[0], sol[0].shape[0], self.rnn_units[0]))
+        self.conv_setup2 = tf.keras.layers.Reshape((sol[0].shape[0], sol[0].shape[0], self.rnn_units[1]))
         sol = tf.expand_dims(sol, -1)  # Don't change
         log_L = tf.expand_dims(log_L, -1)  # Don't change
-        x = tf.concat([sol, log_L], 2)  # Pass previous solution and gradient of log likelihood at previous step; don't change
-        x = self.conv1d_1(x, training=training)
+        x = tf.concat([sol, log_L], 3)  # Pass previous solution and gradient of log likelihood at previous step; don't change
+        x = self.conv2d_1(x, training=training)
         if states1 is None:
             states1 = self.gru1.get_initial_state(x)
+        x = self.gru_setup1(x)
+        x = self.gru_setup2(x)
         x, states1 = self.gru1(x, initial_state=states1, training=training)
-        x = self.conv1d_2(x, training=training)
-        if states2 is None:
-            states2 = self.gru2.get_initial_state(x)
+        x = self.conv_setup1(x)
+        x = self.conv2d_2(x, training=training)
+        #if states2 is None:
+        ##    states2 = self.gru2.get_initial_state(x)
+        x = self.gru_setup1(x)
+        x = self.gru_setup2(x)
         x, states2 = self.gru2(x, initial_state=states2, training=training)
-        x = self.conv1d_3(x, training=training)
+        x = self.conv_setup2(x)
+        x = self.conv2d_3(x, training=training)
         x = tf.squeeze(x, [-1])  # Don't change
         hidden_states = [states1, states2]
         if return_state:
