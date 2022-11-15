@@ -46,7 +46,7 @@
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Recurrent Inference Machines" href="Notebooks/RIM-Test-1D-Gaussians.html" />
+    <link rel="next" title="1D Gaussian" href="Notebooks/RIM-Test-1D-Gaussians.html" />
     <link rel="prev" title="RIM Model" href="rim_model.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -105,7 +105,12 @@
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="Notebooks/RIM-Test-1D-Gaussians.html">
-   Recurrent Inference Machines
+   1D Gaussian
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Notebooks/RIM-Test-2D-Gaussians.html">
+   2D Gaussians
   </a>
  </li>
 </ul>
@@ -188,6 +193,15 @@
    </code>
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#RIM_physical.calc_grad_standard_2D">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     calc_grad_standard_2D()
+    </span>
+   </code>
+  </a>
+ </li>
 </ul>
 
         </nav>
@@ -224,6 +238,27 @@
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="RIM_physical.calc_grad_standard_2D">
+<span class="sig-prename descclassname"><span class="pre">RIM_physical.</span></span><span class="sig-name descname"><span class="pre">calc_grad_standard_2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C_N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#RIM_physical.calc_grad_standard_2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate gradient of log likelihood function.</p>
+<div class="math notranslate nohighlight">
+\[\nabla \mathfrak{L}_t = (\mathbf{y}-A\mathbf{x})^TC_N^{-1}A\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Y</strong> – True “unconvolved” model</p></li>
+<li><p><strong>A</strong> – Convolution matrix</p></li>
+<li><p><strong>C_N</strong> – Noise vector (1D)</p></li>
+<li><p><strong>x</strong> – Current solution calculated from RIM</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>asinh of the gradient</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
@@ -233,7 +268,7 @@
         <div class='prev-next-bottom'>
             
     <a class='left-prev' id="prev-link" href="rim_model.html" title="previous page">RIM Model</a>
-    <a class='right-next' id="next-link" href="Notebooks/RIM-Test-1D-Gaussians.html" title="next page">Recurrent Inference Machines</a>
+    <a class='right-next' id="next-link" href="Notebooks/RIM-Test-1D-Gaussians.html" title="next page">1D Gaussian</a>
 
         </div>
         

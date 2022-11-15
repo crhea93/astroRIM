@@ -102,12 +102,10 @@ class RIM_Model_2D(tf.keras.Model):
         self.gru_setup2 = tf.keras.layers.Lambda(lambda x: tf.expand_dims(x, axis=-1))
         self.gru1 = tf.keras.layers.GRU(rnn_units[0], activation='tanh', recurrent_activation='sigmoid',
                                         return_sequences=True, return_state=True)
-        #self.conv_setup1 = tf.keras.layers.Reshape((10, 10, rnn_units[0]))
         self.conv2d_2 = tf.keras.layers.Conv2DTranspose(filters=conv_filters, kernel_size=kernel_size, strides=(1, 1),
                                                         padding='same', activation='tanh')
         self.gru2 = tf.keras.layers.GRU(rnn_units[1], activation='tanh', recurrent_activation='sigmoid',
                                         return_sequences=True, return_state=True)
-        #self.conv_setup2 = tf.keras.layers.Reshape((424, 424, rnn_units2))
         self.conv2d_3 = tf.keras.layers.Conv2D(filters=1, kernel_size=kernel_size, strides=(1, 1),
                                                padding='same', activation='linear')
         self.rnn_units = rnn_units  # DO NOT CHANGE THIS LINE
@@ -139,8 +137,8 @@ class RIM_Model_2D(tf.keras.Model):
         x, states1 = self.gru1(x, initial_state=states1, training=training)
         x = self.conv_setup1(x)
         x = self.conv2d_2(x, training=training)
-        #if states2 is None:
-        ##    states2 = self.gru2.get_initial_state(x)
+        if states2 is None:
+            states2 = self.gru2.get_initial_state(x)
         x = self.gru_setup1(x)
         x = self.gru_setup2(x)
         x, states2 = self.gru2(x, initial_state=states2, training=training)

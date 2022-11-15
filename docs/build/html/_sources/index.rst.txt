@@ -40,6 +40,7 @@ Examples
        :caption: Example Modules:
 
        Notebooks/RIM-Test-1D-Gaussians
+       Notebooks/RIM-Test-2D-Gaussians
 
 
 
