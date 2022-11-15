@@ -103,7 +103,7 @@
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="Notebooks/RIM-Test-1D-Gaussians.html">
-   1D Noisy Gaussian Deconvolution
+   Recurrent Inference Machines
   </a>
  </li>
 </ul>
@@ -271,15 +271,14 @@ states2: State vector two (optional)</p>
 <dd><p>Subclass model to create recurrent inference machine architecture</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="RIM_model.RIM_Model_2D.call">
-<span class="sig-name descname"><span class="pre">call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">states1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">states2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#RIM_model.RIM_Model_2D.call" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_states</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#RIM_model.RIM_Model_2D.call" title="Permalink to this definition">¶</a></dt>
 <dd><p>A single run through the recurrent inference machine
 conv2d -&gt; gru -&gt; conv2d_T -&gt; gru -&gt; conv2d
 When we go from a convolutional layer to a GRU, we need to first flatten the activation map. We then use the
 expand_dims function to make sure the input of the GRU has the correct format (batch length, feature dims, 1).
-:param inputs: X_train – used to calculate gradient
 :param sol: solution at time step t (x_t)
-:param states1: Hidden state of gru 1
-:param states2: Hidden state of gru 2
+:param log_L: Gradient of log likelihood
+:param hidden_states: List of hidden state vectors
 :param return_state: Return the hidden state boolean
 :param training: Boolean determining whether or not the layer acts in training or inference mode</p>
 </dd></dl>

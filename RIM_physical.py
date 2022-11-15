@@ -28,7 +28,7 @@ def calc_grad_standard(Y, A, C_N, x):
     x_max = tf.reduce_max(x)  # Calculate maximum value of x
     x_max = tf.maximum(x_max, tf.constant(1e-4, dtype=tf.float32))  # Make sure no weird division
     x_norm = tf.divide(x, x_max)   # Normalize x -- we do this to get the correct normalization so that A*x is correctly scaled
-    conv_sol = tf.einsum('bij,bk->bi', A, x_norm)  # Calculate A*x
+    conv_sol = tf.einsum('...ij,...j->...i', A, x_norm)  # Calculate A*x
     C_N_inv = tf.linalg.inv(C_N)  # Invert C_N
     residual_init = Y - conv_sol  # Returns a bn vector
     residual = tf.einsum("...i, ...ij -> ...j", residual_init, C_N_inv)  # Multiply (Y - conv_sol).T*C_N_inv -> returns a bn vector
