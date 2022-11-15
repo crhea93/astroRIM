@@ -14,10 +14,12 @@ Users are provided with a standard set of 1D and 2D RIM configurations and likel
 We have tried to make the installation of `astroRIM` as smooth and painless as possible; however, if you have suggestions, please reach out to us.
 
 Below are instructions for installing on a linux distribution (only tested on Ubuntu and Pop-OS!).
+1. **Clone** this repository. I suggest cloning it in Documents or Applications.
+    ```git clone https://github.com/crhea93/astroRIM.git```
+2. **Enter repository** wherever you cloned it.
+    ```cd astroRIM```
+3. **Create** rim environment using the following command: `conda env create -f rim.yml`. Now, whenever you wish to use `astroRIM`, you can load the environment by simply typing the following into your terminal: `conda activate rim`.  
 
-Clone this repository. I suggest cloning it in Documents or Applications. git clone https://github.com/crhea93/astroRIM.git
-Enter repository wherever you cloned it. cd astroRIM
-Create rim environment using the following command: conda env create -f rim.yml. Now, whenever you wish to use `astroRIM`, you can load the environment by simply typing the following into your terminal: conda activate rim.
 If you are on a Mac, you will need to change step 3 slightly: 3. Create rim environment with conda create -n rim and then install the requirements with pip install -r requirements.txt.
 
 ## Where to find examples
