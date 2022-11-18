@@ -19,6 +19,15 @@ Users are strongly encouraged to use `run_RIM.py` as a template for training and
 plots for the training vs. validation loss, the learning rate, and an example solution from the test set. We have also included an ipython notebook to
 analyse the results of a trained RIM in `Notebooks/Analysis.ipynb`. Other example notebooks can be found in the directory entitled `Notebooks`.
 
+`run_RIM.py` can be called as:
+.. code-block::
+   python run_RIM.py nodes conv_filters kernel_size epochs t_steps batch_size learning_rate name output_name
+
+`nodes` is the number of nodes in the gated recurrent units, `conv_filters` is the number of convolutional filters, `kernel_size` is the size of the kernels,
+`epochs` is the number of training epochs, `t_steps` is the number of steps per RIM, `batch_size` 
+is the batch size, `learning_rate` is the initial learning rate, `name` is the suffix of the data (i.e. `spectra_name.pkl`), and `output_name` is the additional
+output suffix (leave as '' if you don't want one). 
+
 Files to Modify 
 ^^^^^^^^^^^^^^^
 If you wish to implement a modified version of the RIM (i.e. not with our standard architecture or not using the standard likelihood function), this can be
