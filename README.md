@@ -20,6 +20,8 @@ Below are instructions for installing on a linux distribution (only tested on Ub
     ```cd astroRIM```
 3. **Create** rim environment using the following command: `conda env create -f rim.yml`. Now, whenever you wish to use `astroRIM`, you can load the environment by simply typing the following into your terminal: `conda activate rim`.  
 
+You may run into issues with `hdf5/h5py`. If this is the case, activate the rim environment and install `h5py` with `conda install h5py`.
+
 If you are on a Mac, you will need to change step 3 slightly: 3. Create rim environment with conda create -n rim and then install the requirements with pip install -r requirements.txt.
 
 ## Where to find examples
