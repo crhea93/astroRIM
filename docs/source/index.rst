@@ -15,18 +15,16 @@ to quickly build your own. Examples include using a RIM to solve a 1D and 2D den
 
 You can find the API documentation here as well.
 
-Users are strongly encouraged to use `run_RIM.py` as a template for training and testing the RIM since it contains all the required calls and creates 
+Users are strongly encouraged to use `Clusters/run_RIM.py` as a template for training and testing the RIM since it contains all the required calls and creates 
 plots for the training vs. validation loss, the learning rate, and an example solution from the test set. We have also included an ipython notebook to
 analyse the results of a trained RIM in `Notebooks/Analysis.ipynb`. Other example notebooks can be found in the directory entitled `Notebooks`.
 
 `run_RIM.py` can be called as:
 .. code-block::
-   python run_RIM.py nodes conv_filters kernel_size epochs t_steps batch_size learning_rate name output_name
+   python Clusters/run_RIM.py Clusters/example.i
 
-`nodes` is the number of nodes in the gated recurrent units, `conv_filters` is the number of convolutional filters, `kernel_size` is the size of the kernels,
-`epochs` is the number of training epochs, `t_steps` is the number of steps per RIM, `batch_size` 
-is the batch size, `learning_rate` is the initial learning rate, `name` is the suffix of the data (i.e. `spectra_name.pkl`), and `output_name` is the additional
-output suffix (leave as '' if you don't want one). 
+where `Clusters/example.i` contains the network's parameters, the location of the data, and data descriptions. Please read the example (`Clusters/example.i`) to see a complete list of
+variables.
 
 Files to Modify 
 ^^^^^^^^^^^^^^^

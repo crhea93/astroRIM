@@ -27,7 +27,7 @@ class RIM(tf.keras.Model):
 
     """
     def __init__(self, rim_model, gradient, input_size, dimensions=1, t_steps=10, learning_rate=0.01, decay=0.5, 
-                patience=10, learning_rate_function='step', epochs_drop=10
+                patience=10, learning_rate_function='step', epochs_drop=10, outputPath='.'
                 ):
         """
         Initialize Recurrent Inference Machine
@@ -43,6 +43,7 @@ class RIM(tf.keras.Model):
             patience: Number of epochs to wait before decaying (default 10)
             learning_rate_function: Function to use to update learning rate (default 'step'; other options are 'exponential' and 'linear')
             epochs_drop: Number of epochs before decaying the learning rate (only if learning_rate_function='step'; defaut 10)
+            outputPath: Full path to output directory (default '.')
 
         Returns:
             Instance of RIM ready to be fit
@@ -68,7 +69,7 @@ class RIM(tf.keras.Model):
         self.calc_grad = gradient
 
         # Setup log file
-        self.log = open('log_%s.txt' % (datetime.now().strftime("%m-%d-%Y-%H:%M:%S")), 'w+')
+        self.log = open(os.path.join(outputPath, 'log_%s.txt' % (datetime.now().strftime("%m-%d-%Y-%H:%M:%S"))), 'w+')
 
 
     def init_states(self, batch_size):
@@ -82,9 +83,9 @@ class RIM(tf.keras.Model):
         hidden_vectors = [None]
         if self.dimensions == 1:
             # Create the number of hidden states equivalent to the number of GRUs
-            hidden_vectors = [tf.zeros(shape=(batch_size, val)) for val in self.model.rnn_units]
+            hidden_vectors = [tf.zeros(shape=(batch_size, val), dtype=tf.float32) for val in self.model.rnn_units]
         elif self.dimensions == 2:
-            hidden_vectors = [tf.zeros(shape=(batch_size, val)) for val in self.model.rnn_units]
+            hidden_vectors = [tf.zeros(shape=(batch_size, val), dtype=tf.float32) for val in self.model.rnn_units]
         else:
             print('Please enter a valid dimension size (1 or 2)')
         return hidden_vectors
@@ -99,9 +100,9 @@ class RIM(tf.keras.Model):
         """
         y_init = None
         if self.dimensions == 1:
-            y_init = tf.ones(shape=(batch_size, self.size_))
+            y_init = tf.ones(shape=(batch_size, self.size_), dtype=tf.float32)
         elif self.dimensions == 2:
-            y_init = tf.ones(shape=(batch_size, self.size_, self.size_))
+            y_init = tf.ones(shape=(batch_size, self.size_, self.size_), dtype=tf.float32)
         else:
             print('Please enter a valid dimension size (1 or 2)')
         return y_init
@@ -237,6 +238,7 @@ class RIM(tf.keras.Model):
             # compute gradient
         grads = tape.gradient(train_loss_value, model.trainable_weights)
         # Clip by norm each layer
+        grads = [tf.clip_by_norm(grad, 5.) for grad in grads]
         # update weights
         self.optimizer.apply_gradients(zip(grads, model.trainable_weights))
         # update metrics
@@ -305,8 +307,8 @@ class RIM(tf.keras.Model):
         # forward pass, no backprop, inference mode # We run this for the number of time steps in the RIM
         for t_step in range(self.t_steps):
             log_L = self.calc_grad(y, A, C, sol_t)
-            val_logits, hidden_states = model(sol_t, log_L, hidden_states=hidden_states, training=False)
-            sol_t = sol_t + val_logits
+            test_logits, hidden_states = model(sol_t, log_L, hidden_states=hidden_states, training=False)
+            sol_t = sol_t + test_logits
             solution_step.append(sol_t)
         return solution_step
 
@@ -385,7 +387,12 @@ class RIM(tf.keras.Model):
                         epoch + 1, current_percent, time.strftime("%H:%M:%S", ETA),
                         train_loss_value, float(self.train_acc_metric.result()),
                         val_loss_value, float(self.val_acc_metric.result())
-                    ), end="\r")
+                        ), end="\r")
+                    self.log.write(template_valid.format(
+                        epoch + 1, current_percent, time.strftime("%H:%M:%S", ETA),
+                        train_loss_value, float(self.train_acc_metric.result()),
+                        val_loss_value, float(self.val_acc_metric.result())
+                        ))
                 time_since_prev = time.time()  # Update time of previous call
             # End of Epoch training/validation -- now several print statements and calculations
             print(template_valid.format(
@@ -407,6 +414,10 @@ class RIM(tf.keras.Model):
             print("Validation MSE: %.4f" % (float(val_acc),))
             total_time = time.gmtime(float(time.time() - start_epoch))
             print("Time taken on epoch: %s seconds \n\n" % (time.strftime("%H:%M:%S", total_time)))
+            self.log.write("")
+            self.log.write("Training MSE: %.4f" % (float(train_acc),))
+            self.log.write("Validation MSE: %.4f" % (float(val_acc),))
+            self.log.write("Time taken on epoch: %s seconds \n\n" % (time.strftime("%H:%M:%S", total_time)))
             training_loss_values.append(train_loss_value)
             valid_loss_values.append(val_loss_value)
             self.model.save_weights('./tmp/weights%i'%epoch)  # Save weights for epoch in temporary folder
@@ -429,7 +440,7 @@ class RIM(tf.keras.Model):
         A single run through the recurrent inference machine for prediction purposes
 
         Args:
-            test_dataset: batch test set (X_test, Y_test, A_test)
+            test_dataset: batch test set (Y_test, A_test, C_test)
 
         Return:
             solutions: Solution vector of the form (test_number, timesteps, vector)
@@ -461,4 +472,3 @@ class RIM(tf.keras.Model):
             val_logits, hidden_states = self.model(sol_t, log_L, hidden_states=hidden_states, training=False)
             sol_t = sol_t + val_logits
             solution_steps.append(sol_t)
-        return solution_steps

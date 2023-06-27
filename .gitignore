@@ -1,7 +1,10 @@
 Notebooks/tmp/
 Notebooks/*.txt
 
+tmp/
+Outputs/
 
+*.txt
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
