@@ -33,7 +33,7 @@ def calc_grad_standard(Y, A, C_N, x):
     residual_init = Y - conv_sol  # Returns a bn vector
     residual = tf.einsum("...i, ...ij -> ...j", residual_init, C_N_inv)  # Multiply (Y - conv_sol).T*C_N_inv -> returns a bn vector
     grad = tf.einsum("...i, ...ij -> ...j", residual, A)  # Multiply residual by A
-    return grad  # tf.math.asinh(grad)
+    return grad
 
 def calc_grad_standard_2D(Y, A, C_N, x):
     r"""
