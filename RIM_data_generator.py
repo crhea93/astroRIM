@@ -160,8 +160,11 @@ class CustomDataGen(tf.keras.utils.Sequence):
         spectraData = pickle.load(open(os.path.join(self.X_path, 'spectra_%s.pkl'%self.dataName), 'rb'))
         responseData = pickle.load(open(os.path.join(self.A_path, 'rmfs_%s.pkl'%self.dataName), 'rb'))
         self.n = len(responseData)
-        lowerBound, upperBound = self.__bounds__(len(trueData))
+        #print(self.n)
+        lowerBound, upperBound = self.__bounds__(self.n)
         specNums = np.random.randint(self.lowerBound, self.upperBound, self.batch_size)  # Obtain random indices matching batch size
+        #print(self.dataType)
+        #print(specNums)
         #X = [trueData[specNum][1][min_:max_]/max_calc(trueData[specNum][1][min_:max_]) for specNum in specNums]  # Get true data
         #Y = [spectraData[specNum][0][1][min_:max_]/max_calc(spectraData[specNum][0][1][min_:max_]) for specNum in specNums]  # Get observation data
         X = [trueData[specNum][1][min_:max_] for specNum in specNums]  # Get true data
@@ -170,6 +173,7 @@ class CustomDataGen(tf.keras.utils.Sequence):
         A = [responseData[respNum][min_:max_, min_:max_] for respNum in respNums]  # Get response data
         #C = [spectraData[specNum][0][2][min_:max_]/max_calc(spectraData[specNum][0][2][min_:max_]) for specNum in specNums]  # Get noise data
         C = [spectraData[specNum][0][2][min_:max_] for specNum in specNums]  # Get noise data
+        
         return X, Y, A, C
         
                

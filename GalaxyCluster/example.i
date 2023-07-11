@@ -1,12 +1,12 @@
 nodes = 500  # Nodes in GRUs
 conv_filters = 4  # Number of Convolutional Filters per Convolutional Layer
 kernel_size = 3  # Convolutional Kernel Size 
-epochs = 30  # Training Epochs 
+epochs = 2  # Training Epochs 
 t_steps = 3  # Time steps in RIM 
-batch_size = 32  # Training batch size  
+batch_size = 16  # Training batch size  
 learning_rate = 0.005  # Initial learning rate 
 learning_rate_function  = step  # Type of learning rate function (options are: step, exponential, or linear)
-decay = 0.5  # Decay rate 
+decay = 0.85  # Decay rate 
 epochs_drop = 4  # Number of epochs before changing learning rate
 name = batch_0_mini  # Appendix of name of data (i.e. name=mini if data is called 'spectra_mini.pkl')
 outputPath = /home/carterrhea/Downloads/Outputs  # Output data path 

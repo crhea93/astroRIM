@@ -30,6 +30,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pickle
 import os 
+import tensorflow as tf
 from read_input import read_input_file
 from RIM_data_generator import CustomDataGen
 from RIM_sequence import RIM
@@ -56,10 +57,66 @@ dimensions = 1  # Dimensions of the problem
 model = RIM(rim_model=rim_architecture, gradient=calc_grad_standard, input_size=140, dimensions=dimensions, t_steps=t_steps, 
             learning_rate=learning_rate, learning_rate_function=learning_rate_function, epochs_drop=epochs_drop, outputPath=outputPath)
 
-train_dataset = CustomDataGen(X_path=dataPath, A_path=rmfPath, dataType='training', batch_size=batch_size, numData=5000, dataName=name, outputName=outputPath)
-valid_dataset = CustomDataGen(X_path=dataPath, A_path=rmfPath, dataType='validation', batch_size=batch_size, numData=5000, dataName=name, outputName=outputPath)
+#train_dataset = CustomDataGen(X_path=dataPath, A_path=rmfPath, dataType='training', batch_size=batch_size, numData=7000, dataName=name, outputName=outputPath)
+#train_dataset = tf.data.Dataset.from_generator(
+#    train_dataset, 
+#    output_types=(tf.float32, tf.float32, tf.float32, tf.float32), 
+#    output_shapes=((None,), (None,), (None,None,), (None,)))
 
+#train_dataset = train_dataset.prefetch(3)
+#valid_dataset = CustomDataGen(X_path=dataPath, A_path=rmfPath, dataType='validation', batch_size=batch_size, numData=2000, dataName=name, outputName=outputPath)
+#valid_dataset = valid_dataset.prefetch(3)
 # Fit model
+
+'''responses_data = pickle.load(open(rmfPath+'/rmfs_%s.pkl'%name, 'rb'))
+spectra_data = pickle.load(open(dataPath+'/spectra_%s.pkl'%name, 'rb'))
+true_spectra_data = pickle.load(open(dataPath+'/true_%s.pkl'%name, 'rb'))
+# Pull out spectra                                                                                                                                                                            
+min_ = 35  # Min spectral Channel                                                                                                                                                           
+max_ = 175  # Max spectral Channel                                                                                                                                                            
+spectra_x = [data[1][0][0][min_:max_] for data in spectra_data.items()]
+spectra_y = [data[1][0][1][min_:max_] for data in spectra_data.items()]
+spectra_y_maxes = [np.max(data[1][0][1][min_:max_]) for data in spectra_data.items()]
+noise = [data[1][0][2][min_:max_] for ct,data in enumerate(spectra_data.items())]
+true_spectra_y = [data for data in true_spectra_data.items()]
+true_spectra_y = [data[1][1][min_:max_]  for data in true_spectra_y]
+spectra_response = [data[1][1] for data in spectra_data.items()]
+responses = [responses_data[val][:1024, :1024][min_:max_, min_:max_] for val in spectra_response]
+
+# Create training and validation sets                                                                                                                                                         
+train_percentage = 0.8
+valid_percentage = 0.9
+test_percentage = 1.0
+len_X = len(true_spectra_y)
+
+X_train = true_spectra_y[:int(train_percentage*len_X)]
+Y_train = spectra_y[:int(train_percentage*len_X)]
+A_train = responses[:int(train_percentage*len_X)]
+#C_train = [np.diag(val) for val in noise[:int(train_percentage*len_X)]]                                                                                                                      
+C_train = noise[:int(train_percentage*len_X)]
+
+X_valid = true_spectra_y[int(train_percentage*len_X):int(valid_percentage*len_X)]
+Y_valid = spectra_y[int(train_percentage*len_X):int(valid_percentage*len_X)]
+A_valid = responses[int(train_percentage*len_X):int(valid_percentage*len_X)]
+#C_valid = [np.diag(val) for val in noise[int(train_percentage*len_X):int(valid_percentage*len_X)]]                                                                                           
+C_valid = noise[int(train_percentage*len_X):int(valid_percentage*len_X)]
+
+X_test = true_spectra_y[int(valid_percentage * len_X):]
+Y_test = spectra_y[int(valid_percentage * len_X):]
+A_test = responses[int(valid_percentage * len_X):]
+#C_test = [np.diag(val) for val in noise[int(valid_percentage*len_X):]]                                                                                                                       
+C_test = noise[int(valid_percentage*len_X):]
+
+train_dataset = tf.data.Dataset.from_tensor_slices((X_train, Y_train, A_train, C_train))                                                                                                    
+train_dataset = train_dataset.batch(batch_size, drop_remainder=True)                                                                                                                        
+train_dataset = train_dataset.prefetch(3)                                                                                                                                                   
+# Prepare the validation dataset                                                                                                                                                             
+valid_dataset = tf.data.Dataset.from_tensor_slices((X_valid, Y_valid, A_valid, C_valid))
+valid_dataset = valid_dataset.batch(batch_size, drop_remainder=True)                                                               
+valid_dataset = valid_dataset.prefetch(3) '''
+train_dataset = CustomDataGen(X_path=dataPath, A_path=rmfPath, dataType='training', batch_size=batch_size, numData=7000, dataName=name, outputName=outputPath)
+valid_dataset = CustomDataGen(X_path=dataPath, A_path=rmfPath, dataType='validation', batch_size=batch_size, numData=1000, dataName=name, outputName=outputPath)
+
 ysol_valid, training_loss, validation_loss, learning_rates = model.fit(batch_size, epochs, train_dataset, valid_dataset)
 pickle.dump(training_loss, open('%s/training_loss_%in_%ie_%its_%ib_%s.pkl' % (outputPath, nodes, epochs, t_steps, batch_size, name), 'wb'))
 pickle.dump(validation_loss, open('%s/validation_loss_%in_%ie_%its_%ib_%s.pkl' % (outputPath, nodes, epochs, t_steps, batch_size ,name), 'wb'))
@@ -86,7 +143,9 @@ plt.clf()
 
 # Run trained network on test set
 print('Test data')
-test_dataset = CustomDataGen(X_path=dataPath, A_path=rmfPath, dataType='test', batch_size=batch_size, numData=1000, dataName=name, outputName=outputPath)
+test_dataset = CustomDataGen(X_path=dataPath, A_path=rmfPath, dataType='test', batch_size=batch_size, numData=100, dataName=name, outputName=outputPath)
+#test_dataset = tf.data.Dataset.from_tensor_slices((Y_test, A_test, C_test))                                                                                                                  
+#test_dataset = test_dataset.batch(batch_size, drop_remainder=True)
 ysol = model(test_dataset)
 # Save model weights
 model.save_weights('%s/weights_%in_%ie_%its_%ib_%.2Elr_%s/weights' % (outputPath, nodes, epochs, t_steps, batch_size, learning_rate, name))

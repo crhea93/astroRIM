@@ -57,7 +57,8 @@ class RIM(tf.keras.Model):
         self.decay = decay#tf.cast(decay, tf.float32)  # Set decay value
         self.epochs_drop = epochs_drop  # Set number of epochs to wait until dropping the learning rate
         self.patience = tf.cast(patience, tf.int16)  # Set patience for early stopping
-        self.optimizer = tf.keras.optimizers.Adamax(learning_rate=self.learning_rate, clipnorm=5)  # Set adamax optimzer with clipnorm
+        #self.optimizer = tf.keras.optimizers.Adamax(learning_rate=self.learning_rate, clipnorm=5)  # Set adamax optimzer with clipnorm
+        self.optimizer = tf.keras.optimizers.RMSprop(learning_rate=self.learning_rate, clipnorm=5)
         self.loss_fn = tf.keras.losses.MeanSquaredError()
         self.train_acc_metric = tf.keras.metrics.MeanSquaredError()
         self.val_acc_metric = tf.keras.metrics.MeanSquaredError()
