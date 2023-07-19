@@ -1,5 +1,7 @@
 """ 
 This script checks if any RMFs that were created are blank. If any RMFs are, then they will be removed. Finally, a clean RMF pickle file will be created.
+
+This should not be used for creating synthetic data! This should only be used if the rmf pickle file is necessary. I really only use this as a verifcation step.
 """
 import numpy as np
 import pickle
@@ -17,12 +19,12 @@ def clean_rmfs(filename):
     print('Total number of rmfs: %i'%(len(responses)))
 
     # Remove bad RMFS
-    good_responses = list(np.delete(responses, not_indices))
-    print('Number of good RMFs after cleaning: %i'%(len(good_responses)))
-    clean_filename = filename + '_clean'
-    pickle.dump(good_responses, open(clean_filename+'.pkl', 'wb'))
+    #good_responses = list(np.delete(responses, not_indices))
+    #print('Number of good RMFs after cleaning: %i'%(len(good_responses)))
+    #clean_filename = filename + '_clean'
+    #pickle.dump(good_responses, open(clean_filename+'.pkl', 'wb'))
 
-def __main__():
+if __name__ == "__main__":
     RMFS_dir = '/export/home/carterrhea/Documents/ChandraData/MachineLearningPaperI/RMFs'
     for file in os.listdir(RMFS_dir):
         if file.endswith(".pkl") and 'not' not in file:
