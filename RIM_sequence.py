@@ -26,7 +26,7 @@ class RIM(tf.keras.Model):
     If the problem is 2D, we assume the input is square.
 
     """
-    def __init__(self, rim_model, gradient, input_size, dimensions=1, t_steps=10, learning_rate=0.01, decay=0.5, 
+    def __init__(self, rim_model, gradient, input_size, dimensions=1, t_steps=10, learning_rate=0.01, decay=0.5,
                 patience=10, learning_rate_function='step', epochs_drop=10, outputPath='.'
                 ):
         """
@@ -34,7 +34,7 @@ class RIM(tf.keras.Model):
 
         Args:
             rim_model: Instance of RIM Model class
-            gradient: Instance of gradient of likelihood function 
+            gradient: Instance of gradient of likelihood function
             input_size: Size of input vector
             dimensions: Number of dimensions of the problem (default 1)
             t_steps: Number of time steps in RIM (default 10)
@@ -47,7 +47,7 @@ class RIM(tf.keras.Model):
 
         Returns:
             Instance of RIM ready to be fit
-        
+
         """
         super().__init__(self)
         # Define Optimization Function, Loss Function, and Metrics
@@ -57,8 +57,7 @@ class RIM(tf.keras.Model):
         self.decay = decay#tf.cast(decay, tf.float32)  # Set decay value
         self.epochs_drop = epochs_drop  # Set number of epochs to wait until dropping the learning rate
         self.patience = tf.cast(patience, tf.int16)  # Set patience for early stopping
-        #self.optimizer = tf.keras.optimizers.Adamax(learning_rate=self.learning_rate, clipnorm=5)  # Set adamax optimzer with clipnorm
-        self.optimizer = tf.keras.optimizers.RMSprop(learning_rate=self.learning_rate, clipnorm=5)
+        self.optimizer = tf.keras.optimizers.Adamax(learning_rate=self.learning_rate, clipnorm=5)  # Set adamax optimzer with clipnorm
         self.loss_fn = tf.keras.losses.MeanSquaredError()
         self.train_acc_metric = tf.keras.metrics.MeanSquaredError()
         self.val_acc_metric = tf.keras.metrics.MeanSquaredError()
@@ -79,7 +78,7 @@ class RIM(tf.keras.Model):
 
         Args:
             batch_size: Number of spectra in batch
-        
+
         """
         hidden_vectors = [None]
         if self.dimensions == 1:
@@ -97,13 +96,13 @@ class RIM(tf.keras.Model):
 
         Args:
             batch_size: Number of spectra in batch
-        
+
         """
         y_init = None
         if self.dimensions == 1:
-            y_init = tf.ones(shape=(batch_size, self.size_), dtype=tf.float32)
+            y_init = tf.ones(shape=(batch_size, self.size_))#, dtype=tf.float32)
         elif self.dimensions == 2:
-            y_init = tf.ones(shape=(batch_size, self.size_, self.size_), dtype=tf.float32)
+            y_init = tf.ones(shape=(batch_size, self.size_, self.size_)#), dtype=tf.float32)
         else:
             print('Please enter a valid dimension size (1 or 2)')
         return y_init
@@ -113,7 +112,7 @@ class RIM(tf.keras.Model):
     def learning_rate_decay(self, epoch):
         r"""
         Update the learrning rate at the end of each epoch based on the decay equation
-        
+
         .. math::
             \alpha=\frac{\alpha_0}{1+\eta*\epsilon}
 
@@ -141,28 +140,28 @@ class RIM(tf.keras.Model):
 
         Return:
             Updated learning rate
-        
+
         """
         decay_term = (1 + self.decay * tf.math.floor((epoch)/self.epochs_drop))
         self.learning_rate = self.learning_rate/decay_term
-    
+
 
     #@tf.function
     def step_decay(self, epoch):
         r"""
-        Update the learning rate at the end of a given epoch 
+        Update the learning rate at the end of a given epoch
 
         .. math::
             \alpha = \alpha_0 * \eta**floor(\epsilon/\text{epoch drop})
 
-        Args: 
+        Args:
             epoch: Current epoch of training (epsilon)
 
         Return:
             Updated learning rate
 
         """
-    
+
         self.learning_rate = self.learning_rate_init * tf.math.pow(self.decay, tf.math.floor(epoch/self.epochs_drop))
 
     def assign_learning_rate_function(self,learning_rate_function):
@@ -194,7 +193,7 @@ class RIM(tf.keras.Model):
             y_true: True solution
             x_sol: Final updated solution from RIM
 
-        Return: 
+        Return:
             mse value
         """
         x_sol = tf.cast(x_sol, tf.float32)
@@ -238,8 +237,6 @@ class RIM(tf.keras.Model):
             train_loss_value /= self.t_steps  # Have to normalize
             # compute gradient
         grads = tape.gradient(train_loss_value, model.trainable_weights)
-        # Clip by norm each layer
-        grads = [tf.clip_by_norm(grad, 5.) for grad in grads]
         # update weights
         self.optimizer.apply_gradients(zip(grads, model.trainable_weights))
         # update metrics
@@ -326,7 +323,7 @@ class RIM(tf.keras.Model):
             epochs: number of epochs (int)
             train_dataset: batched training set (X_train, Y_train, A_train, C_train)
             val_dataset: batched validation set (X_valid, Y_valid, A_valid, C_valid)
-        
+
         Return:
             ysol: Solution vectors for validation set (batch, timesteps, values)
             training_loss_values: Vector of training loss values
@@ -361,8 +358,10 @@ class RIM(tf.keras.Model):
                 c_batch_train = tf.cast(c_batch_train, dtype=tf.float32)
                 train_batch_step = tf.convert_to_tensor(train_batch_step, dtype=tf.float32)
                 train_loss_value = self.train_step(train_batch_step, x_batch_train,
-                                                             y_batch_train,
-                                                             self.model, a_train_batch, c_batch_train, batch_size=batch_size)
+                                                     y_batch_train, self.model,
+                                                     a_train_batch, c_batch_train,
+                                                     batch_size=batch_size
+                                                  )
                 # Output!
                 current_percent = np.round(100*(train_batch_step/max_batch_step), 2)
                 current_step = float(train_batch_step/max_batch_step)
@@ -371,7 +370,7 @@ class RIM(tf.keras.Model):
                     print(template_train.format(
                         epoch + 1, current_percent, time.strftime("%H:%M:%S", ETA),
                         train_loss_value, float(self.train_acc_metric.result())
-                    ), end="\r")
+                        ), end="\r")
                 time_since_prev = time.time()  # Update time of previous call
             # Evaluation on validation set -- Run a validation loop at the end of each epoch.
             for val_batch_step, (x_batch_val, y_batch_val, a_batch_val, c_batch_val) in enumerate(val_dataset):
@@ -379,7 +378,10 @@ class RIM(tf.keras.Model):
                 y_batch_val = tf.cast(y_batch_val, dtype=tf.float32)
                 c_batch_val = tf.cast(c_batch_val, dtype=tf.float32)
                 val_batch_step = tf.convert_to_tensor(val_batch_step, dtype=tf.float32)
-                val_loss_value, ysol = self.valid_step(val_batch_step, x_batch_val, y_batch_val, self.model, a_batch_val, c_batch_val, batch_size=batch_size)
+                val_loss_value, ysol = self.valid_step(val_batch_step, x_batch_val,
+                                                        y_batch_val, self.model,
+                                                         a_batch_val, c_batch_val,
+                                                         batch_size=batch_size)
                 # More output!
                 current_percent = np.round(100*(val_batch_step/max_batch_step), 2)
                 if int(val_batch_step) % 10 == 0:
@@ -421,12 +423,12 @@ class RIM(tf.keras.Model):
             self.log.write("Time taken on epoch: %s seconds \n\n" % (time.strftime("%H:%M:%S", total_time)))
             training_loss_values.append(train_loss_value)
             valid_loss_values.append(val_loss_value)
-            self.model.save_weights('./tmp/weights%i'%epoch)  # Save weights for epoch in temporary folder
+            #self.model.save_weights('./tmp/weights%i'%epoch)  # Save weights for epoch in temporary folder
             # Check for early stopping
             wait += 1  # Update waiting integer
             if val_loss_value > best:
                 best = val_loss_value  # Update best fit
-                wait = 0  # Reset wait 
+                wait = 0  # Reset wait
             if wait >= self.patience:  # If the validation loss has not decreased in X (defined by self.patience) steps
                 pass # break
             # Update learning rate
@@ -449,7 +451,10 @@ class RIM(tf.keras.Model):
         solutions = []  # List containing all the solutions at each timestep
         for test_batch_step, (y_batch_test, a_batch_test, c_batch_test) in enumerate(test_dataset):
             test_batch_step = tf.convert_to_tensor(test_batch_step, dtype=tf.int32)
-            sol_t = self.test_step(test_batch_step, y_batch_test, self.model, a_batch_test, c_batch_test, batch_size=self.batch_size)
+            sol_t = self.test_step(test_batch_step, y_batch_test, self.model,
+                                    a_batch_test, c_batch_test,
+                                    batch_size=self.batch_size
+                                  )
             solutions.append(sol_t)
         return solutions
 

@@ -17,19 +17,19 @@ class RIM_Model_1D(tf.keras.Model):
             rnn_units: List of units in GRUs ([Int])
 
         """
+        self.rnn_units = rnn_units
         super().__init__(self)
         # Define Layers of RIM
         self.conv1d_1 = tf.keras.layers.Conv1D(filters=conv_filters, kernel_size=kernel_size, strides=1,
                                                padding='same', activation='tanh')
-        self.gru1 = tf.keras.layers.GRU(rnn_units[0], activation='tanh', recurrent_activation='sigmoid',
+        self.gru1 = tf.keras.layers.GRU(self.rnn_units[0], activation='tanh', recurrent_activation='sigmoid',
                                         return_sequences=True, return_state=True)
         self.conv1d_2 = tf.keras.layers.Conv1DTranspose(filters=conv_filters, kernel_size=kernel_size, strides=1,
                                                         padding='same', activation='tanh')
-        self.gru2 = tf.keras.layers.GRU(rnn_units[1], activation='tanh', recurrent_activation='sigmoid',
+        self.gru2 = tf.keras.layers.GRU(self.rnn_units[1], activation='tanh', recurrent_activation='sigmoid',
                                         return_sequences=True, return_state=True)
         self.conv1d_3 = tf.keras.layers.Conv1D(filters=1, kernel_size=kernel_size, strides=1,
                                                         padding='same', activation='linear')
-        self.rnn_units = rnn_units  # DO NOT CHANGE THIS LINE
 
 
     def call(self, sol, log_L, hidden_states=[None], return_state=True, training=False):
@@ -57,9 +57,12 @@ class RIM_Model_1D(tf.keras.Model):
             states2: State vector two (optional)
         """
         [states1, states2] = hidden_states
-        sol = tf.expand_dims(sol, -1)  # Don't change
-        log_L = tf.expand_dims(log_L, -1)  # Don't change
-        x = tf.concat([sol, log_L], 2)  # Pass previous solution and gradient of log likelihood at previous step; don't change
+        #print(sol.shape, log_L.shape)
+        sol = tf.expand_dims(sol, -1)
+        #sol = tf.cast(sol, dtype=tf.float16)
+        log_L = tf.expand_dims(log_L, -1)
+        x = tf.concat([sol, log_L], 2)  # Pass previous solution and gradient of log likelihood at previous step
+        #x = tf.expand_dims(x, -1)
         x = self.conv1d_1(x, training=training)
         if states1 is None:
             states1 = self.gru1.get_initial_state(x)
@@ -69,10 +72,10 @@ class RIM_Model_1D(tf.keras.Model):
             states2 = self.gru2.get_initial_state(x)
         x, states2 = self.gru2(x, initial_state=states2, training=training)
         x = self.conv1d_3(x, training=training)
-        x = tf.squeeze(x, [-1])  # Don't change
-        hidden_states = [states1, states2]
+        x = tf.squeeze(x, [-1])
+        #x = tf.cast(x, dtype=tf.float16)
         if return_state:
-            return x, hidden_states
+            return x, [states1, states2]
         else:
             return x
 
