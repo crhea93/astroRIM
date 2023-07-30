@@ -102,7 +102,7 @@ class RIM(tf.keras.Model):
         if self.dimensions == 1:
             y_init = tf.ones(shape=(batch_size, self.size_))#, dtype=tf.float32)
         elif self.dimensions == 2:
-            y_init = tf.ones(shape=(batch_size, self.size_, self.size_)#), dtype=tf.float32)
+            y_init = tf.ones(shape=(batch_size, self.size_, self.size_))#, dtype=tf.float32)
         else:
             print('Please enter a valid dimension size (1 or 2)')
         return y_init
